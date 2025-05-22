@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://cjqw61bchu2gv"]
+
+[ext_resource type="Script" uid="uid://dn503do7qxhpn" path="res://Player/PlayerController.cs" id="1_tok1r"]
+[ext_resource type="Texture2D" uid="uid://bky4bo4viv8au" path="res://icon.svg" id="4_a3hmo"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_q3lat"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y8f4q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_a3hmo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8g4oa"]
+size = Vector2(26, 26)
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sync")]
+collision_mask = 3
+script = ExtResource("1_tok1r")
+sync = NodePath("MultiplayerSynchronizer")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_q3lat")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+sprite_frames = SubResource("SpriteFrames_y8f4q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_8g4oa")
