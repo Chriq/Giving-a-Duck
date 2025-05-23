@@ -11,7 +11,7 @@ public partial class SceneManager : Node2D {
         int index = 0;
         foreach (PlayerInfo p in GameManager.Instance.players.Values) {
             PlayerController player = playerPrefab.Instantiate<PlayerController>();
-            player.info = p;
+            player.playerId = p.id;
             AddChild(player);
 
             if (index < spawnPoints.Count) {
@@ -23,6 +23,8 @@ public partial class SceneManager : Node2D {
 
             index++;
         }
+
+        GameManager.Instance.InitializeItems();
     }
 
 }

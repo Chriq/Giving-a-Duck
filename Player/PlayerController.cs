@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 
 public partial class PlayerController : CharacterBody2D {
-
-    public PlayerInfo info;
+    public int playerId;
+    public PlayerInfo info => GameManager.Instance.players.GetValueOrDefault(playerId);
 
     [Export] float speed = 120;
     [Export] float jumpSpeed = -180;
@@ -21,11 +21,10 @@ public partial class PlayerController : CharacterBody2D {
     [Export] AirState airState;
     [Export] WallState wallState;
 
-    private List<Item> items = new();
     private int jumps = 0;
 
     public override void _Ready() {
-        if (info != null) sync.SetMultiplayerAuthority(info.id);
+        sync.SetMultiplayerAuthority(playerId);
 
         idleState.Setup(this, null);
         runState.Setup(this, null);
@@ -43,7 +42,7 @@ public partial class PlayerController : CharacterBody2D {
             } else {
                 machine.Set(runState);
             }
-        } else if (IsOnWall() && items.Contains(Item.WALL_JUMP)) {
+        } else if (IsOnWall() && info.items.Contains(Item.WALL_JUMP)) {
             machine.Set(wallState);
         } else {
             machine.Set(airState);
@@ -74,18 +73,14 @@ public partial class PlayerController : CharacterBody2D {
                 jumps = 0;
             }
 
-            // if (items.Contains(Item.WALL_JUMP) && IsOnWall()) {
+            // if (info.items.Contains(Item.WALL_JUMP) && IsOnWall()) {
             //     jumps = 0;
             // }
 
-            if (jumps < 1 || items.Contains(Item.DOUBLE_JUMP) && jumps < 2) {
+            if (jumps < 1 || info.items.Contains(Item.DOUBLE_JUMP) && jumps < 2) {
                 Velocity = new Vector2(Velocity.X, jumpSpeed);
                 jumps++;
             }
         }
-    }
-
-    public void Give(Item item) {
-        items.Add(item);
     }
 }

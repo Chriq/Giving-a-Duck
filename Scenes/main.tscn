@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dy2mfr1b54bnf"]
+[gd_scene load_steps=7 format=3 uid="uid://dy2mfr1b54bnf"]
 
 [ext_resource type="Script" uid="uid://bc5h4ej8xtuas" path="res://Scripts/SceneManager.cs" id="1_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="2_8gbba"]
+[ext_resource type="Script" uid="uid://ww2mygqc1y65" path="res://UI/ItemDisplay.cs" id="3_8gbba"]
+[ext_resource type="Script" uid="uid://brikiagjxwtfq" path="res://UI/ChatWindow.cs" id="4_jjvhh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dw5q1"]
 size = Vector2(105, 20)
@@ -40,3 +42,47 @@ position = Vector2(143, 85)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
 position = Vector2(0, -36)
 shape = SubResource("RectangleShape2D_wr7lu")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_8gbba")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." node_paths=PackedStringArray("requestList", "requestButton", "sendList", "playerList", "sendButton")]
+offset_left = 195.0
+offset_top = 5.0
+offset_right = 317.0
+offset_bottom = 124.0
+script = ExtResource("4_jjvhh")
+requestList = NodePath("Request/RequestableItems")
+requestButton = NodePath("Request/RequestButton")
+sendList = NodePath("Send/SendableItems")
+playerList = NodePath("Send/SendTo")
+sendButton = NodePath("Send/SendButton")
+
+[node name="Request" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="RequestableItems" type="ItemList" parent="HBoxContainer/Request"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="RequestButton" type="Button" parent="HBoxContainer/Request"]
+layout_mode = 2
+text = "Request"
+
+[node name="Send" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="SendableItems" type="ItemList" parent="HBoxContainer/Send"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="SendTo" type="ItemList" parent="HBoxContainer/Send"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="SendButton" type="Button" parent="HBoxContainer/Send"]
+layout_mode = 2
+text = "Send
+"
