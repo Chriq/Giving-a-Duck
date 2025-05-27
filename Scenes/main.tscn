@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dy2mfr1b54bnf"]
+[gd_scene load_steps=8 format=3 uid="uid://dy2mfr1b54bnf"]
 
 [ext_resource type="Script" uid="uid://bc5h4ej8xtuas" path="res://Scripts/SceneManager.cs" id="1_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="2_8gbba"]
 [ext_resource type="Script" uid="uid://ww2mygqc1y65" path="res://UI/ItemDisplay.cs" id="3_8gbba"]
+[ext_resource type="PackedScene" uid="uid://hjy0q8mgjrgt" path="res://Player/Spawn.tscn" id="3_kry3j"]
 [ext_resource type="Script" uid="uid://brikiagjxwtfq" path="res://UI/ChatWindow.cs" id="4_jjvhh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dw5q1"]
@@ -14,6 +15,8 @@ size = Vector2(20, 92)
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_bo1nx")
 playerPrefab = ExtResource("2_8gbba")
+
+[node name="Spawn" parent="." instance=ExtResource("3_kry3j")]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2(49, 120)
@@ -27,14 +30,6 @@ position = Vector2(246, 124)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
 position = Vector2(-10.5, 0)
 shape = SubResource("RectangleShape2D_dw5q1")
-
-[node name="Spawn" type="Node2D" parent="."]
-
-[node name="0" type="Node2D" parent="Spawn" groups=["PlayerSpawn"]]
-position = Vector2(51, 95)
-
-[node name="1" type="Node2D" parent="Spawn" groups=["PlayerSpawn"]]
-position = Vector2(240, 97)
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="."]
 position = Vector2(143, 85)

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class PlayerController : CharacterBody2D {
     public int playerId;
@@ -20,6 +21,9 @@ public partial class PlayerController : CharacterBody2D {
     [Export] IdleState idleState;
     [Export] AirState airState;
     [Export] WallState wallState;
+    [Export] DashState dashState;
+
+    [Export] bool dev = false;
 
     private int jumps = 0;
 
@@ -30,12 +34,26 @@ public partial class PlayerController : CharacterBody2D {
         runState.Setup(this, null);
         airState.Setup(this, null);
         wallState.Setup(this, null);
+        dashState.Setup(this, null);
 
         machine = new();
         machine.Set(idleState);
+
+        if (dev) {
+            playerId = 1;
+            PlayerInfo devInfo = new(1, "test");
+            List<Item> allItemList = ((Item[])Enum.GetValues(typeof(Item))).ToList();
+            devInfo.items.AddRange(allItemList);
+            // devInfo.items = [Item.WALL_JUMP, Item.DOUBLE_JUMP];
+            GameManager.Instance.players.Add(1, devInfo);
+        }
     }
 
     public void SelectState(float axis) {
+        if (Input.IsActionJustPressed("Dash") || machine.state == dashState) {
+            machine.Set(dashState);
+        }
+
         if (IsOnFloor()) {
             if (axis == 0) {
                 machine.Set(idleState);
@@ -51,7 +69,7 @@ public partial class PlayerController : CharacterBody2D {
 
 
     public override void _PhysicsProcess(double delta) {
-        if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) {
+        if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId() || dev) {
             HandleJump();
             Move((float)delta);
         }
@@ -77,6 +95,7 @@ public partial class PlayerController : CharacterBody2D {
             //     jumps = 0;
             // }
 
+            GD.Print(info.items);
             if (jumps < 1 || info.items.Contains(Item.DOUBLE_JUMP) && jumps < 2) {
                 Velocity = new Vector2(Velocity.X, jumpSpeed);
                 jumps++;

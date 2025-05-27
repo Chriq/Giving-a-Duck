@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://4nutee4uj2cd"]
+
+[ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="1_3tial"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1avp2"]
+size = Vector2(133, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rkuh3"]
+size = Vector2(133, 20)
+
+[node name="DoubleJump" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_3tial")]
+position = Vector2(47, 125)
+dev = true
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-1, -48)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(156, 168)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-89.5, 0)
+shape = SubResource("RectangleShape2D_1avp2")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+position = Vector2(476, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+position = Vector2(-139, 158)
+shape = SubResource("RectangleShape2D_rkuh3")

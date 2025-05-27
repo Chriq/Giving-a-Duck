@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://hjy0q8mgjrgt"]
+
+[node name="Spawn" type="Node2D"]
+
+[node name="0" type="Node2D" parent="." groups=["PlayerSpawn"]]
+position = Vector2(51, 95)
+
+[node name="1" type="Node2D" parent="." groups=["PlayerSpawn"]]
+position = Vector2(240, 97)
+
+[node name="2" type="Node2D" parent="." groups=["PlayerSpawn"]]
+position = Vector2(240, 97)
+
+[node name="3" type="Node2D" parent="." groups=["PlayerSpawn"]]
+position = Vector2(240, 97)

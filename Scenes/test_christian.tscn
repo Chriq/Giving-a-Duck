@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://drcgmwfq6yd0o"]
+[gd_scene load_steps=4 format=3 uid="uid://drcgmwfq6yd0o"]
 
 [ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="1_115iw"]
-[ext_resource type="Script" uid="uid://bc5h4ej8xtuas" path="res://Scripts/SceneManager.cs" id="1_wr7lu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dw5q1"]
 size = Vector2(105, 20)
@@ -10,8 +9,6 @@ size = Vector2(105, 20)
 size = Vector2(20, 92)
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_wr7lu")
-playerPrefab = ExtResource("1_115iw")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2(49, 120)
@@ -35,7 +32,7 @@ position = Vector2(51, 95)
 position = Vector2(240, 97)
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="."]
-position = Vector2(143, 85)
+position = Vector2(146, 195)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
 position = Vector2(0, -36)
@@ -43,3 +40,4 @@ shape = SubResource("RectangleShape2D_wr7lu")
 
 [node name="Player" parent="." instance=ExtResource("1_115iw")]
 position = Vector2(33, 83)
+dev = true
