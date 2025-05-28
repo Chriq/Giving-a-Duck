@@ -27,9 +27,16 @@ public partial class GameManager : Node {
         EmitSignal(SignalName.ItemsChanged);
     }
 
-    public void RequestItem(long requestPlayerId, Array<Item> items) {
-        // TODO: send to chat
-    }
+    // public void RequestItem(long requestPlayerId, Item item) {
+    //     int chunk = 0;
+    //     Rpc(MethodName.ExecuteRequest, Multiplayer.GetUniqueId(), chunk, (int)item);
+    // }
+
+
+    // [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    // private void ExecuteRequest(long requestPlayerId, int chunk, int item) {
+    //     // TODO, send to chat
+    // }
 
     public void GiveItem(long fromPlayerId, long toPlayerId, Array<Item> items) {
         if (!Multiplayer.IsServer()) {
@@ -38,12 +45,7 @@ public partial class GameManager : Node {
             ExecuteSend(fromPlayerId, toPlayerId, items);
         }
     }
-
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    private void ExecuteRequest(long requestPlayerId, Item item) {
-        // TODO, send to chat
-    }
-
+    
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     private void ExecuteSend(long fromPlayerId, long toPlayerId, Array<Item> items) {
         List<Item> toPlayerItemList = players.GetValueOrDefault(toPlayerId).items;

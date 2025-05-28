@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://dps5eewj4vqrp"]
+
+[ext_resource type="Theme" uid="uid://br2ihpw7be7ya" path="res://UI_ChatTheme.tres" id="1_gbnpx"]
+
+[node name="Request" type="HBoxContainer"]
+offset_right = 128.0
+offset_bottom = 32.0
+
+[node name="RequestLabel" type="Label" parent="."]
+custom_minimum_size = Vector2(75, 15)
+layout_mode = 2
+theme = ExtResource("1_gbnpx")
+text = "ERROR: Unknown Request"
+autowrap_mode = 2
+
+[node name="SendButton" type="Button" parent="."]
+custom_minimum_size = Vector2(25, 15)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_gbnpx")
+text = "Send
+"

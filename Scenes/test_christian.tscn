@@ -40,4 +40,3 @@ shape = SubResource("RectangleShape2D_wr7lu")
 
 [node name="Player" parent="." instance=ExtResource("1_115iw")]
 position = Vector2(33, 83)
-dev = true

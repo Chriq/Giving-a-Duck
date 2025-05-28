@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cylnkaf68fwtt"]
+
+[ext_resource type="Theme" uid="uid://br2ihpw7be7ya" path="res://UI_ChatTheme.tres" id="1_hekcn"]
+
+[node name="Request" type="HBoxContainer"]
+offset_right = 100.0
+offset_bottom = 15.0
+
+[node name="RequestLabel" type="Label" parent="."]
+custom_minimum_size = Vector2(100, 15)
+layout_mode = 2
+theme = ExtResource("1_hekcn")
+text = "ERROR: Unknown Log"
+autowrap_mode = 2

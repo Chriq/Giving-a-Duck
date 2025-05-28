@@ -1,0 +1,175 @@
+[gd_scene load_steps=10 format=3 uid="uid://b08johecwp2ra"]
+
+[ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="1_5mmi3"]
+[ext_resource type="Script" uid="uid://bc5h4ej8xtuas" path="res://Scripts/SceneManager.cs" id="1_e5x3y"]
+[ext_resource type="PackedScene" uid="uid://hjy0q8mgjrgt" path="res://Player/Spawn.tscn" id="3_7xp6c"]
+[ext_resource type="PackedScene" uid="uid://dps5eewj4vqrp" path="res://UI/UI_Prefab/ui_chat_request.tscn" id="5_7xp6c"]
+[ext_resource type="Script" uid="uid://brikiagjxwtfq" path="res://UI/ChatWindow.cs" id="5_eur51"]
+[ext_resource type="Theme" uid="uid://br2ihpw7be7ya" path="res://UI_ChatTheme.tres" id="6_7xp6c"]
+[ext_resource type="Texture2D" uid="uid://bky4bo4viv8au" path="res://icon.svg" id="6_ybc43"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dw5q1"]
+size = Vector2(105, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wr7lu"]
+size = Vector2(20, 92)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_e5x3y")
+playerPrefab = ExtResource("1_5mmi3")
+
+[node name="Spawn" parent="." instance=ExtResource("3_7xp6c")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(49, 120)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_dw5q1")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2(246, 124)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(-10.5, 0)
+shape = SubResource("RectangleShape2D_dw5q1")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2(143, 85)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+position = Vector2(0, -36)
+shape = SubResource("RectangleShape2D_wr7lu")
+
+[node name="ChatWindow" type="Control" parent="." node_paths=PackedStringArray("chatRequestTarget", "requestButton")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 210.0
+offset_top = 10.0
+offset_right = 310.0
+offset_bottom = 110.0
+script = ExtResource("5_eur51")
+chatRequestTarget = NodePath("ChatLog Scrollable/VBox Scrollable")
+chatRequestPrefab = ExtResource("5_7xp6c")
+requestButton = NodePath("../ItemMenu/ItemPopup/RequestButton")
+
+[node name="ChatLog Scrollable" type="ScrollContainer" parent="ChatWindow"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox Scrollable" type="VBoxContainer" parent="ChatWindow/ChatLog Scrollable"]
+layout_mode = 2
+
+[node name="ItemMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 135.0
+offset_right = 40.0
+offset_bottom = 175.0
+
+[node name="ItemPopup" type="HBoxContainer" parent="ItemMenu"]
+layout_mode = 0
+offset_left = 20.0
+offset_right = 300.0
+offset_bottom = 17.0
+
+[node name="Label" type="Label" parent="ItemMenu/ItemPopup"]
+layout_mode = 2
+theme = ExtResource("6_7xp6c")
+text = "abraham lincoln"
+
+[node name="Label2" type="Label" parent="ItemMenu/ItemPopup"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_7xp6c")
+text = "abraham lincoln"
+
+[node name="RequestButton" type="Button" parent="ItemMenu/ItemPopup"]
+clip_contents = true
+layout_mode = 2
+theme = ExtResource("6_7xp6c")
+text = "Request"
+
+[node name="ItemIconList" type="HBoxContainer" parent="ItemMenu"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 300.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect4" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect5" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect6" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect7" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect8" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect9" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect10" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect11" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
+
+[node name="TextureRect12" type="TextureRect" parent="ItemMenu/ItemIconList"]
+layout_mode = 2
+texture = ExtResource("6_ybc43")
+expand_mode = 3
