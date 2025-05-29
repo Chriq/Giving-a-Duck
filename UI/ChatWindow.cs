@@ -11,6 +11,8 @@ public partial class ChatWindow : Node {
 
     // [Export] ItemList requestList;
     [Export] Button requestButton;
+
+    [Export] ItemMenu itemMenu;
     // [Export] ItemList sendList;
     // [Export] ItemList playerList;
     // [Export] Button sendButton;
@@ -50,7 +52,7 @@ public partial class ChatWindow : Node {
     public void OnRequest() {
         // TODO : Use player name instead of uniqueID
         int chunk = 0; // TODO : Retrieve chunk location of current player
-        int item = 0; // TODO: Retrieve selected item from dropdown
+        int item = itemMenu.selected;
         
         Rpc(MethodName.ExecuteRequest, Multiplayer.GetUniqueId(), chunk, item);
 
