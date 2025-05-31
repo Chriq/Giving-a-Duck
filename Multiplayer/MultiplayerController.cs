@@ -9,9 +9,7 @@ public partial class MultiplayerController : Node {
 
     [Export] string address = "127.0.0.1";
     [Export] int port = 1234;
-
-    [Export] bool dedicated_server = false;
-
+    
     private ENetMultiplayerPeer peer;
 
     public override void _Ready() {
@@ -32,30 +30,56 @@ public partial class MultiplayerController : Node {
     public void Host() {
         peer = new ENetMultiplayerPeer();
         Error error = peer.CreateServer(port, 32, 0, 0, 0);
+        
         if (error != Error.Ok) {
+            // TODO: Show error on screen if not dedicated server
             GD.PrintErr("Error creating Host: " + error);
             return;
         }
 
+        GD.Print($"Multiplayer host created on Port {port}");
+
         // Use compression to prioritize bandwidth vs CPU usage
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
+        
         GD.Print("Waiting for players!");
-        SendPlayerInfo(Multiplayer.GetUniqueId(), "Player " + Multiplayer.GetUniqueId());
+
+        if (!OS.HasFeature("dedicated_server"))
+        {
+            LoadGame();
+            SendPlayerInfo(Multiplayer.GetUniqueId(), "Player " + Multiplayer.GetUniqueId());
+        }
     }
 
     public void Join() {
         peer = new ENetMultiplayerPeer();
-        peer.CreateClient(address, port);
+        Error error = peer.CreateClient(address, port);
+        
+        if (error != Error.Ok) {
+            // TODO: Show error on screen
+            GD.Print($"Error creating Client: {error}");
+            return;
+        }
+
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        GD.Print("Player connected!");
+
+        GD.Print("Player connecting!");
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     private void SendPlayerInfo(int id, string name) {
-        if (!GameManager.Instance.players.ContainsKey(id)) {
-            GameManager.Instance.players[id] = new(id, name);
+
+        SceneManager scene = (SceneManager) GetTree().CurrentScene;
+        if (scene != null)
+        {
+            GD.Print($"Peer {Multiplayer.GetUniqueId()} - PlayerInfo ({id} {name}) - spawn");
+            scene.SpawnPlayer(id);
+        }
+        else if (!GameManager.Instance.players.ContainsKey(id)) {
+            GameManager.Instance.players[id] = new(id);
+            GD.Print($"Peer {Multiplayer.GetUniqueId()} - PlayerInfo ({id} {name}) - no scene");
         }
 
         if (Multiplayer.IsServer()) {
@@ -65,36 +89,35 @@ public partial class MultiplayerController : Node {
         }
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     public void LoadGame() {
         // PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/main.tscn");
         PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/test_jack.tscn");
-        GetTree().ChangeSceneToPacked(scene);
-    }
 
-    public void Start() {
-        Rpc(MethodName.LoadGame);
+        GetTree().ChangeSceneToPacked(scene);
     }
 
     // Called on client only when connection fails
     private void PlayerConnectionFailed() {
-
+        GD.PrintErr("ConnectionFailed");
     }
-
 
     // Called on client only when connected to server
     private void PlayerConnectedToServer() {
+        GD.Print("PlayerConnected");
+
         RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), "Player " + Multiplayer.GetUniqueId());
+
+        LoadGame();
     }
 
     // Called on client and server when player connects
     private void PeerConnected(long id) {
-
+        GameManager.Instance.players[id] = new((int)id);
     }
 
     // Called on client and server when player disconnects
     private void PeerDisconnected(long id) {
+        GameManager.Instance.players[id].playerObject.QueueFree();
         GameManager.Instance.players.Remove(id);
-        // TODO: remove player node from scene, or otherwise handle disconnection
     }
 }

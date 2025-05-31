@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dy2mfr1b54bnf"]
+[gd_scene load_steps=7 format=3 uid="uid://dy2mfr1b54bnf"]
 
 [ext_resource type="Script" uid="uid://bc5h4ej8xtuas" path="res://Scripts/SceneManager.cs" id="1_bo1nx"]
-[ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="2_8gbba"]
 [ext_resource type="Script" uid="uid://ww2mygqc1y65" path="res://UI/ItemDisplay.cs" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://hjy0q8mgjrgt" path="res://Player/Spawn.tscn" id="3_kry3j"]
 [ext_resource type="Script" uid="uid://brikiagjxwtfq" path="res://UI/ChatWindow.cs" id="4_jjvhh"]
@@ -14,7 +13,6 @@ size = Vector2(20, 92)
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_bo1nx")
-playerPrefab = ExtResource("2_8gbba")
 
 [node name="Spawn" parent="." instance=ExtResource("3_kry3j")]
 

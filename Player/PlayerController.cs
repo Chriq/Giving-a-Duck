@@ -41,16 +41,17 @@ public partial class PlayerController : CharacterBody2D {
 
         if (dev) {
             playerId = 1;
-            PlayerInfo devInfo = new(1, "test");
+            PlayerInfo devInfo = new(1);
+            devInfo.name = "test";
             List<Item> allItemList = ((Item[])Enum.GetValues(typeof(Item))).ToList();
             devInfo.items.AddRange(allItemList);
             GameManager.Instance.players.Add(1, devInfo);
         }
 
-        CallDeferred(MethodName.InitMap);
-        foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
-            GD.Print(i, ", ");
-        }
+        // CallDeferred(MethodName.InitMap);
+        // foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
+        //     GD.Print(i, ", ");
+        // }
 
     }
 
@@ -83,9 +84,9 @@ public partial class PlayerController : CharacterBody2D {
             Move((float)delta);
         }
 
-        foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
-            GD.Print(i, ", ");
-        }
+        // foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
+        //     GD.Print(i, ", ");
+        // }
     }
 
     private void Move(float delta) {

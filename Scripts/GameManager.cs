@@ -6,6 +6,7 @@ using System.Linq;
 
 public partial class GameManager : Node {
     public static GameManager Instance;
+
     public System.Collections.Generic.Dictionary<long, PlayerInfo> players = new();
 
     [Signal]
@@ -26,17 +27,6 @@ public partial class GameManager : Node {
 
         EmitSignal(SignalName.ItemsChanged);
     }
-
-    // public void RequestItem(long requestPlayerId, Item item) {
-    //     int chunk = 0;
-    //     Rpc(MethodName.ExecuteRequest, Multiplayer.GetUniqueId(), chunk, (int)item);
-    // }
-
-
-    // [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    // private void ExecuteRequest(long requestPlayerId, int chunk, int item) {
-    //     // TODO, send to chat
-    // }
 
     public void GiveItem(long fromPlayerId, long toPlayerId, Array<Item> items) {
         if (!Multiplayer.IsServer()) {

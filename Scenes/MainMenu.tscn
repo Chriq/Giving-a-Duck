@@ -1,56 +1,20 @@
 [gd_scene load_steps=2 format=3 uid="uid://dq8xdp1vhqq55"]
 
-[ext_resource type="Script" uid="uid://4jy7j2nlmfkd" path="res://Multiplayer/MultiplayerController.cs" id="1_8saeu"]
+[ext_resource type="Script" uid="uid://b5o4lc4g44urn" path="res://Multiplayer/MultiplayerMenu.cs" id="1_tt5f1"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("nameInput", "ipInput", "portInput")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_8saeu")
+script = ExtResource("1_tt5f1")
+nameInput = NodePath("VBoxContainer/TextInput_PlayerName")
+ipInput = NodePath("VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/TextEdit2")
+portInput = NodePath("VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/TextEdit3")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -79.0
-offset_top = -49.0
-offset_right = 79.0
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 0
-alignment = 2
-
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-placeholder_text = "Your Name"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Host" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "HOST"
-
-[node name="Join" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "JOIN"
-
-[node name="Start" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "START"
-
-[node name="Label" type="Label" parent="."]
+[node name="Title" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -63,6 +27,78 @@ text = "The Subtle Art of Giving a Duck"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Host" to="." method="Host"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Join" to="." method="Join"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Start" to="." method="Start"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -133.0
+offset_right = 110.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 2
+
+[node name="TextInput_PlayerName" type="TextEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Your Name"
+
+[node name="Spacer_Name" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label_Host" type="Label" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+text = "Host the Server"
+horizontal_alignment = 1
+
+[node name="Spacer_Start" type="Control" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Host" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HOST"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label_Join" type="Label" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
+layout_mode = 2
+text = "Join a Server"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
+layout_mode = 2
+
+[node name="TextEdit2" type="TextEdit" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(50, 22)
+layout_mode = 2
+placeholder_text = "IP"
+
+[node name="TextEdit3" type="TextEdit" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(50, 22)
+layout_mode = 2
+placeholder_text = "Port"
+
+[node name="Join" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "JOIN"
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/VBoxContainer/Host" to="." method="Host"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/VBoxContainer2/Join" to="." method="Join"]
