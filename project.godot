@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-MultiplayerController="*res://Multiplayer/MultiplayerController.cs"
 GameManager="*res://Scripts/GameManager.cs"
+MapManager="*res://Scripts/MapManager.cs"
 
 [display]
 
@@ -33,6 +33,11 @@ project/assembly_name="TGCJam"
 [global_group]
 
 PlayerSpawn=""
+
+[gui]
+
+theme/custom="uid://ucauqygwtpjd"
+theme/custom_font="uid://c3oerkay821nt"
 
 [input]
 
@@ -59,5 +64,6 @@ Dash={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"

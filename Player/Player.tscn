@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://cjqw61bchu2gv"]
 
 [ext_resource type="Script" uid="uid://dn503do7qxhpn" path="res://Player/PlayerController.cs" id="1_tok1r"]
+[ext_resource type="Texture2D" uid="uid://b8i4rif7hjrhr" path="res://Player/Duck.png" id="2_vlldt"]
 [ext_resource type="Script" uid="uid://buu5kr5termgt" path="res://Player/StateMachine/RunState.cs" id="3_8g4oa"]
 [ext_resource type="Script" uid="uid://c7k44gmh4bkla" path="res://Player/StateMachine/IdleState.cs" id="4_6ysni"]
-[ext_resource type="Texture2D" uid="uid://bky4bo4viv8au" path="res://icon.svg" id="4_a3hmo"]
 [ext_resource type="Script" uid="uid://c3p574g0otaae" path="res://Player/StateMachine/AirState.cs" id="5_vlldt"]
 [ext_resource type="Script" uid="uid://cpkbw4shh3nox" path="res://Player/StateMachine/WallState.cs" id="6_6ysni"]
 [ext_resource type="Script" uid="uid://p5m53nuvlumw" path="res://Player/StateMachine/DashState.cs" id="7_vlldt"]
@@ -17,17 +17,18 @@ properties/0/replication_mode = 1
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_a3hmo")
+"texture": ExtResource("2_vlldt")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8g4oa"]
-size = Vector2(26, 26)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s1rgi"]
+height = 44.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sync", "runState", "idleState", "airState", "wallState", "dashState")]
+z_index = 100
 collision_mask = 3
 script = ExtResource("1_tok1r")
 sync = NodePath("MultiplayerSynchronizer")
@@ -41,11 +42,10 @@ dashState = NodePath("StateMachine/Dash")
 replication_config = SubResource("SceneReplicationConfig_q3lat")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_y8f4q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_8g4oa")
+shape = SubResource("CapsuleShape2D_s1rgi")
 
 [node name="StateMachine" type="Node" parent="."]
 

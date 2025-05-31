@@ -44,9 +44,18 @@ public partial class PlayerController : CharacterBody2D {
             PlayerInfo devInfo = new(1, "test");
             List<Item> allItemList = ((Item[])Enum.GetValues(typeof(Item))).ToList();
             devInfo.items.AddRange(allItemList);
-            // devInfo.items = [Item.WALL_JUMP, Item.DOUBLE_JUMP];
             GameManager.Instance.players.Add(1, devInfo);
         }
+
+        CallDeferred(MethodName.InitMap);
+        foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
+            GD.Print(i, ", ");
+        }
+
+    }
+
+    private void InitMap() {
+        MapManager.Instance.UpdateActive(GlobalPosition);
     }
 
     public void SelectState(float axis) {
@@ -73,6 +82,10 @@ public partial class PlayerController : CharacterBody2D {
             HandleJump();
             Move((float)delta);
         }
+
+        foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
+            GD.Print(i, ", ");
+        }
     }
 
     private void Move(float delta) {
@@ -85,6 +98,7 @@ public partial class PlayerController : CharacterBody2D {
         MoveAndSlide();
     }
 
+    // TODO: fix double + wall jump at same time
     private void HandleJump() {
         if (Input.IsActionJustPressed("Jump")) {
             if (IsOnFloor()) {
@@ -95,7 +109,6 @@ public partial class PlayerController : CharacterBody2D {
             //     jumps = 0;
             // }
 
-            GD.Print(info.items);
             if (jumps < 1 || info.items.Contains(Item.DOUBLE_JUMP) && jumps < 2) {
                 Velocity = new Vector2(Velocity.X, jumpSpeed);
                 jumps++;
