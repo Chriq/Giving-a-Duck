@@ -4,20 +4,36 @@ using System.Collections.Generic;
 using Godot.Collections;
 using System.Linq;
 
+public struct itemRequestInfo
+{
+    public itemRequestInfo(int playerId, int item)
+    {
+        this.playerId = playerId;
+        this.item = item;
+    }
+
+    public int playerId;
+    public int item;
+}
+
 public partial class ChatWindow : Node {
     /* Chat Request UI Elements */
     [Export] Control chatRequestTarget;
     [Export] PackedScene chatRequestPrefab;
+    [Export] PackedScene chatLogPrefab;
 
     // [Export] ItemList requestList;
     [Export] Button requestButton;
 
     [Export] ItemMenu itemMenu;
+
+    System.Collections.Generic.Dictionary<itemRequestInfo, Control> itemRequestList;
     // [Export] ItemList sendList;
     // [Export] ItemList playerList;
     // [Export] Button sendButton;
 
     public override void _Ready() {
+        itemRequestList = new System.Collections.Generic.Dictionary<itemRequestInfo, Control>();
         // UpdatePlayerList();
         // UpdateRequestableItems();
 
@@ -55,44 +71,65 @@ public partial class ChatWindow : Node {
         int item = itemMenu.selected;
         
         Rpc(MethodName.ExecuteRequest, Multiplayer.GetUniqueId(), chunk, item);
-
-        ExecuteLocalRequest(Multiplayer.GetUniqueId(), chunk, item);
     }
-
-    public void ExecuteLocalRequest(long playerId, long chunk, long item) {
-        Control node = chatRequestPrefab.Instantiate<Control>();
-        Label rq_label = node.GetNode<Label>("RequestLabel");
-
-        rq_label.Text = $"You requested {item} from chunk {chunk}.";
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
+    public void ExecuteRequest(int playerId, int chunk, int item) {
         
+        Control node;
+
+        if (playerId == Multiplayer.GetUniqueId())
+        {
+            node = chatLogPrefab.Instantiate<Control>();
+            Label rq_label = node.GetNode<Label>("RequestLabel");
+
+            rq_label.Text = $"You requested {item} from chunk {chunk}.";
+        }
+        else
+        {
+            node = chatRequestPrefab.Instantiate<Control>();
+
+            Label rq_label = node.GetNode<Label>("RequestLabel");
+            rq_label.Text = $"Player {playerId} request from chunk {chunk}: {item}.";
+        
+            Button rq_button = node.GetNode<Button>("SendButton");
+            rq_button.Pressed += () => OnSend(playerId, item);
+        }
+        itemRequestList.Add( new itemRequestInfo(playerId, item), node);
         chatRequestTarget.AddChild(node);
     }
+
+    public void OnSend(int playerId, int item) {
+        if (Multiplayer.IsServer())
+        {
+            ExecuteSend(Multiplayer.GetUniqueId(), playerId, item);
+        }
+        else
+        {
+            RpcId(1, MethodName.ExecuteSend, Multiplayer.GetUniqueId(), playerId, item);
+        }
+    }
+
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void ExecuteRequest(long playerId, long chunk, long item) {
-        Control node = chatRequestPrefab.Instantiate<Control>();
-        Label rq_label = node.GetNode<Label>("RequestLabel");
+    public void ExecuteSend(int completerID, int playerId, int item ) {
+        itemRequestInfo rq = new itemRequestInfo(playerId, item);
 
-        rq_label.Text = $"Player {Multiplayer.GetUniqueId()} request from chunk {chunk}: {item}.";
-        
-        chatRequestTarget.AddChild(node);
+        if (itemRequestList.ContainsKey(rq))
+        {
+            Rpc(MethodName.CompleteSend, completerID, playerId, item);
+        }
+        itemRequestList.Remove(rq);
     }
-
-    public void OnSend() {
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
+    public void CompleteSend(int completerID, int playerId, int item) {
+        GD.Print($"Send ({playerId}, {item}) was completed by ({completerID})");
         // int sendToPlayerId = playerList.GetItemText(playerList.GetSelectedItems()[0]).ToInt();
         // Array<Item> sendItems = GetSelectedItemsFromList(sendList);
         // GD.Print("On Send, Sending To ", sendToPlayerId, " ", sendItems.Count, " items.");
         // GameManager.Instance.GiveItem(Multiplayer.GetUniqueId(), sendToPlayerId, sendItems);
+
+        // TODO: Remove From chat window
+
+        // TODO: Update Item Lists
+
     }
-
-    // private Array<Item> GetSelectedItemsFromList(ItemList list) {
-    //     // Array<Item> items = new();
-
-    //     // foreach (int i in list.GetSelectedItems()) {
-    //     //     string text = list.GetItemText(i);
-    //     //     Item item = (Item)Enum.Parse(typeof(Item), text);
-    //     //     items.Add(item);
-    //     // }
-
-    //     // return items;
-    // }
 }
