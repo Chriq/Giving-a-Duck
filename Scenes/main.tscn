@@ -43,17 +43,13 @@ offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("3_8gbba")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." node_paths=PackedStringArray("requestList", "requestButton", "sendList", "playerList", "sendButton")]
+[node name="HBoxContainer" type="HBoxContainer" parent="." node_paths=PackedStringArray("requestButton")]
 offset_left = 195.0
 offset_top = 5.0
 offset_right = 317.0
 offset_bottom = 124.0
 script = ExtResource("4_jjvhh")
-requestList = NodePath("Request/RequestableItems")
 requestButton = NodePath("Request/RequestButton")
-sendList = NodePath("Send/SendableItems")
-playerList = NodePath("Send/SendTo")
-sendButton = NodePath("Send/SendButton")
 
 [node name="Request" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2

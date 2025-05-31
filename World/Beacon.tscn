@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dovq86syjdlsd"]
+
+[ext_resource type="Script" uid="uid://bcfyj27slyqls" path="res://World/Beacon.cs" id="1_swo8r"]
+[ext_resource type="Texture2D" uid="uid://bky4bo4viv8au" path="res://icon.svg" id="2_0hdhw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u2w5t"]
+size = Vector2(60, 53)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_aho1v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_0hdhw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Beacon" type="Area2D"]
+script = ExtResource("1_swo8r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -19)
+shape = SubResource("RectangleShape2D_u2w5t")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+sprite_frames = SubResource("SpriteFrames_aho1v")

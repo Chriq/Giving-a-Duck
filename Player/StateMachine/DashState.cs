@@ -7,7 +7,6 @@ public partial class DashState : State {
     private double cooldown = 0;
 
     public override void Enter() {
-        GD.Print("Dash");
         float dir = Input.GetAxis("Left", "Right");
         rb.Velocity = new Vector2(dashSpeed * dir, 0);
     }

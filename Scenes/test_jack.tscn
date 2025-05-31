@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://b08johecwp2ra"]
+[gd_scene load_steps=9 format=3 uid="uid://cp514daxjsocv"]
 
 [ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="1_5mmi3"]
 [ext_resource type="Script" uid="uid://bc5h4ej8xtuas" path="res://Scripts/SceneManager.cs" id="1_e5x3y"]
 [ext_resource type="PackedScene" uid="uid://hjy0q8mgjrgt" path="res://Player/Spawn.tscn" id="3_7xp6c"]
-[ext_resource type="PackedScene" uid="uid://dps5eewj4vqrp" path="res://UI/UI_Prefab/ui_chat_request.tscn" id="5_7xp6c"]
 [ext_resource type="Script" uid="uid://brikiagjxwtfq" path="res://UI/ChatWindow.cs" id="5_eur51"]
-[ext_resource type="Theme" uid="uid://br2ihpw7be7ya" path="res://UI_ChatTheme.tres" id="6_7xp6c"]
+[ext_resource type="Theme" path="res://UI_ChatTheme.tres" id="6_7xp6c"]
 [ext_resource type="Texture2D" uid="uid://bky4bo4viv8au" path="res://icon.svg" id="6_ybc43"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dw5q1"]
@@ -40,7 +39,7 @@ position = Vector2(143, 85)
 position = Vector2(0, -36)
 shape = SubResource("RectangleShape2D_wr7lu")
 
-[node name="ChatWindow" type="Control" parent="." node_paths=PackedStringArray("chatRequestTarget", "requestButton")]
+[node name="ChatWindow" type="Control" parent="." node_paths=PackedStringArray("requestButton")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 210.0
@@ -48,8 +47,6 @@ offset_top = 10.0
 offset_right = 310.0
 offset_bottom = 110.0
 script = ExtResource("5_eur51")
-chatRequestTarget = NodePath("ChatLog Scrollable/VBox Scrollable")
-chatRequestPrefab = ExtResource("5_7xp6c")
 requestButton = NodePath("../ItemMenu/ItemPopup/RequestButton")
 
 [node name="ChatLog Scrollable" type="ScrollContainer" parent="ChatWindow"]

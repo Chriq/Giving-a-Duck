@@ -2,19 +2,17 @@ using Godot;
 using System;
 
 public partial class MultiplayerMenu : VBoxContainer {
-    private void Host() {
-        MultiplayerController.Instance.Host();
-    }
+    [Export] TextEdit nameInput;
 
-    private void Join() {
-        MultiplayerController.Instance.Join();
-    }
+    // private void Host() {
+    //     MultiplayerController.Instance.Host();
+    // }
 
-    private void Start() {
-        MultiplayerController.Instance.Start();
-    }
+    // private void Join() {
+    //     MultiplayerController.Instance.Join();
+    // }
 
-    private void Close() {
-        Hide();
-    }
+    // private void Start() {
+    //     MultiplayerController.Instance.Start();
+    // }
 }
