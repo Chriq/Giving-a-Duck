@@ -10,6 +10,8 @@ public partial class MultiplayerController : Node {
     [Export] string address = "127.0.0.1";
     [Export] int port = 1234;
 
+    [Export] bool dedicated_server = false;
+
     private ENetMultiplayerPeer peer;
 
     public override void _Ready() {
@@ -19,13 +21,19 @@ public partial class MultiplayerController : Node {
         Multiplayer.PeerDisconnected += PeerDisconnected;
         Multiplayer.ConnectedToServer += PlayerConnectedToServer;
         Multiplayer.ConnectionFailed += PlayerConnectionFailed;
+        
+        if (OS.HasFeature("dedicated_server"))
+        {
+            GD.Print("Godot Dedicated Server Startup");
+            Host();
+        }
     }
 
     public void Host() {
         peer = new ENetMultiplayerPeer();
-        Error error = peer.CreateServer(port, 2);
+        Error error = peer.CreateServer(port, 2, 0, 0, 0);
         if (error != Error.Ok) {
-            GD.Print("Error creating Host: " + error);
+            GD.PrintErr("Error creating Host: " + error);
             return;
         }
 
