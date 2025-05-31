@@ -5,26 +5,35 @@ using System.Linq;
 
 // https://www.youtube.com/watch?v=e0JLO_5UgQo&t=227s&ab_channel=FinePointCGI
 public partial class MultiplayerController : Node {
+    public static MultiplayerController Instance;
 
     [Export] string address = "127.0.0.1";
     [Export] int port = 1234;
 
-    [Export] TextEdit nameInput;
+    [Export] bool dedicated_server = false;
 
     private ENetMultiplayerPeer peer;
 
     public override void _Ready() {
+        if (Instance == null) Instance = this;
+
         Multiplayer.PeerConnected += PeerConnected;
         Multiplayer.PeerDisconnected += PeerDisconnected;
         Multiplayer.ConnectedToServer += PlayerConnectedToServer;
         Multiplayer.ConnectionFailed += PlayerConnectionFailed;
+        
+        if (OS.HasFeature("dedicated_server"))
+        {
+            GD.Print("Godot Dedicated Server Startup");
+            Host();
+        }
     }
 
     public void Host() {
         peer = new ENetMultiplayerPeer();
-        Error error = peer.CreateServer(port, 2);
+        Error error = peer.CreateServer(port, 32, 0, 0, 0);
         if (error != Error.Ok) {
-            GD.Print("Error creating Host: " + error);
+            GD.PrintErr("Error creating Host: " + error);
             return;
         }
 
@@ -32,7 +41,7 @@ public partial class MultiplayerController : Node {
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Waiting for players!");
-        SendPlayerInfo(Multiplayer.GetUniqueId(), GetPlayerName());
+        SendPlayerInfo(Multiplayer.GetUniqueId(), "Player " + Multiplayer.GetUniqueId());
     }
 
     public void Join() {
@@ -58,7 +67,8 @@ public partial class MultiplayerController : Node {
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     public void LoadGame() {
-        PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/main.tscn");
+        // PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/main.tscn");
+        PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/test_jack.tscn");
         GetTree().ChangeSceneToPacked(scene);
     }
 
@@ -74,7 +84,7 @@ public partial class MultiplayerController : Node {
 
     // Called on client only when connected to server
     private void PlayerConnectedToServer() {
-        RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), GetPlayerName());
+        RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), "Player " + Multiplayer.GetUniqueId());
     }
 
     // Called on client and server when player connects
@@ -86,9 +96,5 @@ public partial class MultiplayerController : Node {
     private void PeerDisconnected(long id) {
         GameManager.Instance.players.Remove(id);
         // TODO: remove player node from scene, or otherwise handle disconnection
-    }
-
-    private string GetPlayerName() {
-        return !string.IsNullOrEmpty(nameInput.Text) ? nameInput.Text : "Player-" + Multiplayer.GetUniqueId();
     }
 }
