@@ -48,9 +48,6 @@ public partial class PlayerController : CharacterBody2D {
         }
 
         CallDeferred(MethodName.InitMap);
-        foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
-            GD.Print(i, ", ");
-        }
 
     }
 
@@ -83,9 +80,7 @@ public partial class PlayerController : CharacterBody2D {
             Move((float)delta);
         }
 
-        foreach (int i in MapManager.Instance.GetChucksToLoad(GlobalPosition)) {
-            GD.Print(i, ", ");
-        }
+        MapManager.Instance.UpdateActive(GlobalPosition);
     }
 
     private void Move(float delta) {

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class MapManager : Node {
     public static MapManager Instance;
@@ -11,37 +12,39 @@ public partial class MapManager : Node {
 
 
     private int currentChunk;
-    private List<int> loadedChunks = new();
+    private Dictionary<int, Node> loadedChunks = new();
 
     public override void _Ready() {
         Instance = this;
-
-        // UpdateActive(new Vector2(312, 287));
-        // UpdateActive(new Vector2(520, 287));
-        //UpdateActive(new Vector2(836, 607));
     }
 
     public void UpdateActive(Vector2 pos) {
+        int playerChunk = GetChunkFromPosition(pos);
+        currentChunk = playerChunk;
 
-        int chunk = GetChunkFromPosition(pos);
-        currentChunk = chunk;
+        int[] chunksToLoad = GetChucksToLoad(pos);
 
-        if (!loadedChunks.Contains(chunk)) {
-            string path = $"res://Scenes/chunk_0{chunk}.tscn";
-            ResourceLoader.LoadThreadedRequest(path);
-            PackedScene scene = (PackedScene)ResourceLoader.LoadThreadedGet(path);
-
-            Node2D c = scene.Instantiate<Node2D>();
-            c.Position = pos - (pos % (CHUNK_SIZE * TILE_SIZE));
-
-            GetTree().CurrentScene.AddChild(c);
-
-            loadedChunks.Add(chunk);
+        foreach (int loadedChunk in loadedChunks.Keys) {
+            if (!chunksToLoad.Contains(loadedChunk)) {
+                loadedChunks[loadedChunk].QueueFree();
+                loadedChunks.Remove(loadedChunk);
+            }
         }
 
-        // GD.Print("Player At: ", pos);
-        // GD.Print("Chunk #: ", chunk);
-        // GD.Print("Position: ", pos - (pos % (CHUNK_SIZE * TILE_SIZE)));
+        foreach (int chuck in chunksToLoad) {
+            if (!loadedChunks.Keys.Contains(chuck)) {
+                string path = $"res://Scenes/chunk_0{chuck}.tscn";
+                ResourceLoader.LoadThreadedRequest(path);
+                PackedScene scene = (PackedScene)ResourceLoader.LoadThreadedGet(path);
+
+                Node2D c = scene.Instantiate<Node2D>();
+                c.Position = GetChunkPositionFromId(chuck);
+
+                GetTree().CurrentScene.AddChild(c);
+
+                loadedChunks.Add(chuck, c);
+            }
+        }
     }
 
     private int GetChunkFromPosition(Vector2 globalPos) {
@@ -52,63 +55,32 @@ public partial class MapManager : Node {
     }
 
     private Vector2 GetChunkPositionFromId(int id) {
-        float x = id % MAP_DIMENSIONS.X;
-        float y = (id - x) * MAP_DIMENSIONS.Y;
+        float x = id % MAP_DIMENSIONS.Y;
+        float y = id / MAP_DIMENSIONS.Y;
+
+        GD.Print($"{x}, {y}, id: {id}");
 
         return new Vector2(x * CHUNK_SIZE * TILE_SIZE, y * CHUNK_SIZE * TILE_SIZE);
     }
 
     public int[] GetChucksToLoad(Vector2 playerPos) {
-        //int chunk = GetChunkFromPosition(playerPos);
-
-
-        // subtract 0.5
         float col = playerPos.X / (CHUNK_SIZE * TILE_SIZE) - 0.5f;
         float row = playerPos.Y / (CHUNK_SIZE * TILE_SIZE) - 0.5f;
 
-        //int nextCol = Mathf.CeilToInt(col - (col % (int)col));
-        //int nextRow = Mathf.CeilToInt(row - (row % (int)row));
-
-        return [
+        List<int> chunksToCheck = new() {
             (int)(MAP_DIMENSIONS.Y * Mathf.Floor(row) + Mathf.Floor(col)),
             (int)(MAP_DIMENSIONS.Y * Mathf.Floor(row) + Mathf.Ceil(col)),
             (int)(MAP_DIMENSIONS.Y * Mathf.Ceil(row) + Mathf.Floor(col)),
             (int)(MAP_DIMENSIONS.Y * Mathf.Ceil(row) + Mathf.Ceil(col)),
-        ];
+        };
 
-        // int chunk = (int)(MAP_DIMENSIONS.Y * (int) row + (int) col);
+        foreach (int c in chunksToCheck.ToArray()) {
+            if (c < 0 || c > MAP_DIMENSIONS.X * MAP_DIMENSIONS.Y - 1) {
+                chunksToCheck.Remove(c);
+            }
+        }
 
-
-
-        // List<int> chunks = new();
-        // chunks.Add(chunk);
-        // if (col % (int)col >= 0.8f) {
-        //     chunks.Add(chunk + 1);
-        // } else if(col % (int)col <= 0.2f) {
-        //     chunks.Add(chunk - 1);
-        // }
-
-
-        // int idx = row * MAP_DIMENSIONS.Y + col;
-        // GD.Print("Player SHOUDL be in chuck " + idx);
-
-        //
+        return chunksToCheck.ToArray();
 
     }
-
-    // public float DistanceToChunk() {
-    //     int[] chucksToCheck = { currentChunk + MAP_DIMENSIONS.Y,
-    //                             currentChunk - MAP_DIMENSIONS.Y,
-    //                             currentChunk + 1,
-    //                             currentChunk - 1
-    //     };
-
-    //     foreach(int )
-    // }
-
-    // function distance(rect, p) {
-    //     var dx = Math.max(rect.min.x - p.x, 0, p.x - rect.max.x);
-    //     var dy = Math.max(rect.min.y - p.y, 0, p.y - rect.max.y);
-    //     return Math.sqrt(dx*dx + dy*dy);
-    // }
 }
