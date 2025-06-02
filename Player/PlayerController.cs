@@ -25,16 +25,19 @@ public partial class PlayerController : CharacterBody2D {
 
     [Export] bool dev = false;
 
+    [Export] AnimatedSprite2D sprite;
+
     private int jumps = 0;
+
 
     public override void _Ready() {
         sync.SetMultiplayerAuthority(playerId);
 
-        idleState.Setup(this, null);
-        runState.Setup(this, null);
-        airState.Setup(this, null);
-        wallState.Setup(this, null);
-        dashState.Setup(this, null);
+        idleState.Setup(this, sprite);
+        runState.Setup(this, sprite);
+        airState.Setup(this, sprite);
+        wallState.Setup(this, sprite);
+        dashState.Setup(this, sprite);
 
         machine = new();
         machine.Set(idleState);
@@ -87,6 +90,8 @@ public partial class PlayerController : CharacterBody2D {
         Velocity += new Vector2(0f, gravity * delta);
 
         float input = Input.GetAxis("Left", "Right");
+        sprite.FlipH = input < 0f || (input == 0f && sprite.FlipH);
+
         SelectState(input);
         machine.state.PhysicsDo(delta);
 

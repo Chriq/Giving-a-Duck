@@ -21,11 +21,11 @@ public partial class RunState : State {
     }
 
     public override void Enter() {
-        //animator.Play("Run");
+        animator.Play("run");
     }
 
     public override void Exit() {
-
+        animator.Play("idle");
     }
 
 }
