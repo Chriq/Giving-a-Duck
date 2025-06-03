@@ -21,9 +21,8 @@ public partial class MultiplayerController : Node {
         Multiplayer.PeerDisconnected += PeerDisconnected;
         Multiplayer.ConnectedToServer += PlayerConnectedToServer;
         Multiplayer.ConnectionFailed += PlayerConnectionFailed;
-        
-        if (OS.HasFeature("dedicated_server"))
-        {
+
+        if (OS.HasFeature("dedicated_server")) {
             GD.Print("Godot Dedicated Server Startup");
             Host();
         }
@@ -68,7 +67,7 @@ public partial class MultiplayerController : Node {
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     public void LoadGame() {
         // PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/main.tscn");
-        PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/test_jack.tscn");
+        PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/test_christian.tscn");
         GetTree().ChangeSceneToPacked(scene);
     }
 

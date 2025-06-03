@@ -8,6 +8,8 @@ public partial class GameManager : Node {
     public static GameManager Instance;
     public System.Collections.Generic.Dictionary<long, PlayerInfo> players = new();
 
+    public Array<string> discoveredBeacons = new();
+
     [Signal]
     public delegate void ItemsChangedEventHandler();
 
@@ -45,7 +47,7 @@ public partial class GameManager : Node {
             ExecuteSend(fromPlayerId, toPlayerId, items);
         }
     }
-    
+
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     private void ExecuteSend(long fromPlayerId, long toPlayerId, Array<Item> items) {
         List<Item> toPlayerItemList = players.GetValueOrDefault(toPlayerId).items;

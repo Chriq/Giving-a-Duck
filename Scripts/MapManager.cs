@@ -38,6 +38,7 @@ public partial class MapManager : Node {
                 PackedScene scene = (PackedScene)ResourceLoader.LoadThreadedGet(path);
 
                 Node2D c = scene.Instantiate<Node2D>();
+                c.Name = "Chunk" + chuck;
                 c.Position = GetChunkPositionFromId(chuck);
 
                 GetTree().CurrentScene.AddChild(c);
@@ -58,7 +59,7 @@ public partial class MapManager : Node {
         float x = id % MAP_DIMENSIONS.Y;
         float y = id / MAP_DIMENSIONS.Y;
 
-        GD.Print($"{x}, {y}, id: {id}");
+        //GD.Print($"{x}, {y}, id: {id}");
 
         return new Vector2(x * CHUNK_SIZE * TILE_SIZE, y * CHUNK_SIZE * TILE_SIZE);
     }

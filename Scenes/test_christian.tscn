@@ -1,8 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://drcgmwfq6yd0o"]
+[gd_scene load_steps=9 format=3 uid="uid://drcgmwfq6yd0o"]
 
 [ext_resource type="PackedScene" uid="uid://cjqw61bchu2gv" path="res://Player/Player.tscn" id="1_115iw"]
+[ext_resource type="Script" uid="uid://bc5h4ej8xtuas" path="res://Scripts/SceneManager.cs" id="1_lqxgc"]
+[ext_resource type="Script" uid="uid://brikiagjxwtfq" path="res://UI/ChatWindow.cs" id="2_acnmw"]
+[ext_resource type="PackedScene" uid="uid://cylnkaf68fwtt" path="res://UI/UI_Prefab/ui_chat_log.tscn" id="3_acnmw"]
+[ext_resource type="PackedScene" uid="uid://dps5eewj4vqrp" path="res://UI/UI_Prefab/ui_chat_request.tscn" id="3_lqxgc"]
+[ext_resource type="Script" uid="uid://dccaqmb4f7648" path="res://UI/ItemMenu.cs" id="4_11q4v"]
+[ext_resource type="Theme" uid="uid://br2ihpw7be7ya" path="res://UI_ChatTheme.tres" id="5_vg6ct"]
+[ext_resource type="Texture2D" uid="uid://bky4bo4viv8au" path="res://icon.svg" id="6_lg81a"]
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_lqxgc")
+playerPrefab = ExtResource("1_115iw")
 
 [node name="Spawn" type="Node2D" parent="."]
 
@@ -12,8 +21,109 @@ position = Vector2(51, 95)
 [node name="1" type="Node2D" parent="Spawn" groups=["PlayerSpawn"]]
 position = Vector2(240, 97)
 
-[node name="Player" parent="." instance=ExtResource("1_115iw")]
-position = Vector2(120, 105)
-dev = true
+[node name="ChatWindow" type="Control" parent="." node_paths=PackedStringArray("chatRequestTarget", "requestButton", "itemMenu")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 210.0
+offset_top = 10.0
+offset_right = 310.0
+offset_bottom = 110.0
+script = ExtResource("2_acnmw")
+chatRequestTarget = NodePath("ChatLog Scrollable/VBox Scrollable")
+chatRequestPrefab = ExtResource("3_lqxgc")
+chatLogPrefab = ExtResource("3_acnmw")
+requestButton = NodePath("../ItemMenu/ItemPopup/RequestButton")
+itemMenu = NodePath("../ItemMenu")
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="ChatLog Scrollable" type="ScrollContainer" parent="ChatWindow"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox Scrollable" type="VBoxContainer" parent="ChatWindow/ChatLog Scrollable"]
+layout_mode = 2
+
+[node name="ItemMenu" type="Control" parent="." node_paths=PackedStringArray("itemIconButtonContainer", "itemPopupcontainer")]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 135.0
+offset_right = 320.0
+offset_bottom = 175.0
+script = ExtResource("4_11q4v")
+itemIconButtonContainer = NodePath("ItemIconList")
+itemPopupcontainer = NodePath("ItemPopup")
+
+[node name="ItemPopup" type="HBoxContainer" parent="ItemMenu"]
+layout_mode = 0
+offset_left = 20.0
+offset_right = 300.0
+offset_bottom = 17.0
+
+[node name="Label" type="Label" parent="ItemMenu/ItemPopup"]
+layout_mode = 2
+theme = ExtResource("5_vg6ct")
+text = "abraham lincoln"
+
+[node name="Label2" type="Label" parent="ItemMenu/ItemPopup"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_vg6ct")
+text = "abraham lincoln"
+
+[node name="RequestButton" type="Button" parent="ItemMenu/ItemPopup"]
+clip_contents = true
+layout_mode = 2
+theme = ExtResource("5_vg6ct")
+text = "Request"
+
+[node name="ItemIconList" type="HBoxContainer" parent="ItemMenu"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -20.0
+offset_right = 160.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="ItemMenu/ItemIconList"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture_normal = ExtResource("6_lg81a")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton2" type="TextureButton" parent="ItemMenu/ItemIconList"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture_normal = ExtResource("6_lg81a")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton3" type="TextureButton" parent="ItemMenu/ItemIconList"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture_normal = ExtResource("6_lg81a")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureButton4" type="TextureButton" parent="ItemMenu/ItemIconList"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture_normal = ExtResource("6_lg81a")
+ignore_texture_size = true
+stretch_mode = 0

@@ -50,12 +50,15 @@ public partial class PlayerController : CharacterBody2D {
             GameManager.Instance.players.Add(1, devInfo);
         }
 
-        CallDeferred(MethodName.InitMap);
 
-    }
+        if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) {
+            MapManager.Instance.UpdateActive(GlobalPosition);
 
-    private void InitMap() {
-        MapManager.Instance.UpdateActive(GlobalPosition);
+            Camera2D cam = new Camera2D();
+            cam.Zoom = new Vector2(0.1f, 0.1f);
+            AddChild(cam);
+        }
+
     }
 
     public void SelectState(float axis) {
@@ -81,9 +84,8 @@ public partial class PlayerController : CharacterBody2D {
         if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId() || dev) {
             HandleJump();
             Move((float)delta);
+            MapManager.Instance.UpdateActive(GlobalPosition);
         }
-
-        MapManager.Instance.UpdateActive(GlobalPosition);
     }
 
     private void Move(float delta) {
