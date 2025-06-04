@@ -48,26 +48,25 @@ public partial class PlayerController : CharacterBody2D {
             List<Item> allItemList = ((Item[])Enum.GetValues(typeof(Item))).ToList();
             devInfo.items.AddRange(allItemList);
             GameManager.Instance.players.Add(1, devInfo);
+        } else {
+            if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) {
+                MapManager.Instance.UpdateActive(GlobalPosition);
+
+                Camera2D cam = new Camera2D();
+                //cam.Zoom = new Vector2(0.1f, 0.1f);
+                AddChild(cam);
+            }
         }
-
-
-        if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) {
-            MapManager.Instance.UpdateActive(GlobalPosition);
-
-            Camera2D cam = new Camera2D();
-            cam.Zoom = new Vector2(0.1f, 0.1f);
-            AddChild(cam);
-        }
-
     }
 
     public void SelectState(float axis) {
-        if (Input.IsActionJustPressed("Dash") || machine.state == dashState) {
+        GD.Print(IsOnWall());
+        if (Input.IsActionJustPressed("Dash")) {
             machine.Set(dashState);
         }
 
         if (IsOnFloor()) {
-            if (axis == 0) {
+            if (axis == 0 && machine.state.complete) {
                 machine.Set(idleState);
             } else {
                 machine.Set(runState);
@@ -84,7 +83,7 @@ public partial class PlayerController : CharacterBody2D {
         if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId() || dev) {
             HandleJump();
             Move((float)delta);
-            MapManager.Instance.UpdateActive(GlobalPosition);
+            if (!dev) MapManager.Instance.UpdateActive(GlobalPosition);
         }
     }
 
@@ -100,21 +99,20 @@ public partial class PlayerController : CharacterBody2D {
         MoveAndSlide();
     }
 
-    // TODO: fix double + wall jump at same time
     private void HandleJump() {
         if (Input.IsActionJustPressed("Jump")) {
             if (IsOnFloor()) {
                 jumps = 0;
             }
 
-            // if (info.items.Contains(Item.WALL_JUMP) && IsOnWall()) {
-            //     jumps = 0;
-            // }
-
-            if (jumps < 1 || info.items.Contains(Item.DOUBLE_JUMP) && jumps < 2) {
+            if (jumps < 1 || info.items.Contains(Item.DOUBLE_JUMP) && jumps < 2 && !IsOnWall()) {
                 Velocity = new Vector2(Velocity.X, jumpSpeed);
                 jumps++;
             }
         }
+    }
+
+    public bool HasItem(Item item) {
+        return info.items.Contains(item);
     }
 }

@@ -36,21 +36,21 @@ public static class ItemClass {
 public enum Item {
     DOUBLE_JUMP,
     WALL_JUMP,
-    DASH
+    DASH,
+    CLIMB
 }
 
-enum ItemFlag
-{
-    DOUBLE_JUMP = 0x01 <<  0,
-    SPRING      = 0x01 <<  1,
-    WALL_JUMP   = 0x01 <<  2,
-    CLIMB       = 0x01 <<  3,
-    DASH        = 0x01 <<  4,
-    BOMB        = 0x01 <<  5,
-    PLATFORMS   = 0x01 <<  6,
-    SIZE        = 0x01 <<  7,
-    LANTERN     = 0x01 <<  8,
-    TORCH       = 0x01 <<  9,
-    ICE_BOOTS   = 0x01 << 10,
-    Goggles     = 0x01 << 11,
+enum ItemFlag {
+    DOUBLE_JUMP = 0x01 << 0,
+    SPRING = 0x01 << 1,
+    WALL_JUMP = 0x01 << 2,
+    CLIMB = 0x01 << 3,
+    DASH = 0x01 << 4,
+    BOMB = 0x01 << 5,
+    PLATFORMS = 0x01 << 6,
+    SIZE = 0x01 << 7,
+    LANTERN = 0x01 << 8,
+    TORCH = 0x01 << 9,
+    ICE_BOOTS = 0x01 << 10,
+    Goggles = 0x01 << 11,
 }

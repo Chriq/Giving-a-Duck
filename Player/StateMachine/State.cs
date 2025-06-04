@@ -8,7 +8,7 @@ public abstract partial class State : Node {
     double time => Time.GetUnixTimeFromSystem() - startTime;
 
     // Player Components
-    protected CharacterBody2D rb;
+    protected PlayerController rb;
     protected AnimatedSprite2D animator;
 
     public virtual void Enter() { }
@@ -16,7 +16,7 @@ public abstract partial class State : Node {
     public virtual void PhysicsDo(double delta) { }
     public virtual void Exit() { }
 
-    public void Setup(CharacterBody2D character, AnimatedSprite2D anim) {
+    public void Setup(PlayerController character, AnimatedSprite2D anim) {
         rb = character;
         animator = anim;
     }

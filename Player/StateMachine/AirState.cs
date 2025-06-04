@@ -6,6 +6,11 @@ public partial class AirState : State {
     [Export] float friction = 0.7f;
     [Export] float acceleration = 0.1f;
 
+    public override void Enter() {
+        animator.Play("fly");
+    }
+
+
 
     public override void PhysicsDo(double delta) {
         float dir = Input.GetAxis("Left", "Right");

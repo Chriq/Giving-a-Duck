@@ -12,6 +12,7 @@ public partial class SceneManager : Node2D {
         foreach (PlayerInfo p in GameManager.Instance.players.Values) {
             PlayerController player = playerPrefab.Instantiate<PlayerController>();
             player.playerId = p.id;
+            player.Name = "Player" + p.id;
             AddChild(player);
 
             if (index < spawnPoints.Count) {

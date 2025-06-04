@@ -15,17 +15,14 @@ public partial class RunState : State {
             rb.Velocity = new Vector2(Mathf.Lerp(rb.Velocity.X, 0f, friction), rb.Velocity.Y);
         }
 
-        if (rb.Velocity == Vector2.Zero) {
+        if (Mathf.Abs(rb.Velocity.X) < 25f) {
+            rb.Velocity = new Vector2(0f, rb.Velocity.Y);
             complete = true;
         }
     }
 
     public override void Enter() {
         animator.Play("run");
-    }
-
-    public override void Exit() {
-        animator.Play("idle");
     }
 
 }
