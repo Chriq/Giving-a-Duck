@@ -10,15 +10,17 @@ public partial class Beacon : Area2D {
     }
 
     public void Discover(Node n) {
-        if (!discovered && n is PlayerController) {
-            discovered = true;
-            GD.Print("Beacon Discovered!");
-            GameManager.Instance.discoveredBeacons.Add(GetPath());
-        }
-
         if (discovered) {
             GD.Print("Already discovered");
         }
+
+        if (!discovered && n is PlayerController) {
+            discovered = true;
+            GameManager.Instance.discoveredBeacons.Add(GetPath());
+            GameManager.Instance.CheckBeacons();
+        }
+
+
     }
 
 }

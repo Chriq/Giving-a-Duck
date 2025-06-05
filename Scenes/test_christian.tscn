@@ -11,9 +11,9 @@ playerPrefab = ExtResource("1_115iw")
 [node name="Spawn" type="Node2D" parent="."]
 
 [node name="0" type="Node2D" parent="Spawn" groups=["PlayerSpawn"]]
-position = Vector2(51, 95)
+position = Vector2(52, 309)
 
 [node name="1" type="Node2D" parent="Spawn" groups=["PlayerSpawn"]]
-position = Vector2(240, 97)
+position = Vector2(241, 311)
 
 [node name="UI" parent="." instance=ExtResource("3_u2w5t")]

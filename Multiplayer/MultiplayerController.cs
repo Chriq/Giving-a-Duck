@@ -11,7 +11,6 @@ public partial class MultiplayerController : Node {
     [Export] int port = 1234;
 
     [Export] bool dedicated_server = false;
-    [Export] TextEdit nameField;
 
     private ENetMultiplayerPeer peer;
 
@@ -22,6 +21,7 @@ public partial class MultiplayerController : Node {
         Multiplayer.PeerDisconnected += PeerDisconnected;
         Multiplayer.ConnectedToServer += PlayerConnectedToServer;
         Multiplayer.ConnectionFailed += PlayerConnectionFailed;
+        Multiplayer.ServerDisconnected += ServerDisconnected;
 
         if (OS.HasFeature("dedicated_server")) {
             GD.Print("Godot Dedicated Server Startup");
@@ -41,7 +41,8 @@ public partial class MultiplayerController : Node {
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Waiting for players!");
-        SendPlayerInfo(Multiplayer.GetUniqueId(), !string.IsNullOrEmpty(nameField.Text) ? nameField.Text : "Player " + Multiplayer.GetUniqueId());
+        SendPlayerInfo(Multiplayer.GetUniqueId(), GetPlayerName());
+        GD.Print(Multiplayer.GetPeers().Length);
     }
 
     public void Join() {
@@ -50,6 +51,7 @@ public partial class MultiplayerController : Node {
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Player connected!");
+        GD.Print(Multiplayer.GetPeers().Length);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -84,7 +86,7 @@ public partial class MultiplayerController : Node {
 
     // Called on client only when connected to server
     private void PlayerConnectedToServer() {
-        RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), !string.IsNullOrEmpty(nameField.Text) ? nameField.Text : "Player " + Multiplayer.GetUniqueId());
+        RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), GetPlayerName());
     }
 
     // Called on client and server when player connects
@@ -94,7 +96,24 @@ public partial class MultiplayerController : Node {
 
     // Called on client and server when player disconnects
     private void PeerDisconnected(long id) {
-        GameManager.Instance.players.Remove(id);
         // TODO: remove player node from scene, or otherwise handle disconnection
+    }
+
+    private void ServerDisconnected() {
+        DisconnectAllPlayers();
+    }
+
+    private void DisconnectAllPlayers() {
+        GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");
+
+        Multiplayer.MultiplayerPeer.Close();
+        Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
+
+        GameManager.Instance.ClearAllData();
+    }
+
+    private string GetPlayerName() {
+        string playerName = (GetTree().CurrentScene as MultiplayerMenu).GetPlayerName();
+        return !string.IsNullOrEmpty(playerName) ? playerName : "Player " + Multiplayer.GetUniqueId();
     }
 }

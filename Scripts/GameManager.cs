@@ -8,6 +8,7 @@ public partial class GameManager : Node {
     public static GameManager Instance;
     public System.Collections.Generic.Dictionary<long, PlayerInfo> players = new();
 
+    private const int TOTAL_NUM_BEACONS = 1;
     public Array<string> discoveredBeacons = new();
 
     [Signal]
@@ -71,5 +72,37 @@ public partial class GameManager : Node {
 
         fromPlayerItemList.Remove(item);
         toPlayerItemList.Add(item);
+    }
+
+    public void CheckBeacons() {
+        if (discoveredBeacons.Count == TOTAL_NUM_BEACONS) {
+            GD.Print("Go To Ending");
+            if (Multiplayer.IsServer()) {
+                Rpc(MethodName.ResetGame);
+            } else {
+                ResetGame();
+            }
+
+        }
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+    private void ResetGame() {
+        CallDeferred(MethodName.DeferredResetGame);
+    }
+
+    private void DeferredResetGame() {
+        GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");
+
+        ClearAllData();
+
+        Multiplayer.MultiplayerPeer.Close();
+        Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
+    }
+
+    public void ClearAllData() {
+        MapManager.Instance.ResetMap();
+        discoveredBeacons.Clear();
+        players.Clear();
     }
 }

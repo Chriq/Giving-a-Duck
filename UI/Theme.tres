@@ -1,6 +1,14 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://ucauqygwtpjd"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://ucauqygwtpjd"]
 
+[ext_resource type="Texture2D" uid="uid://cqdr6a5lf7spx" path="res://UI/ui-box-hover.png" id="1_6joml"]
 [ext_resource type="Texture2D" uid="uid://bwy73m8osqwew" path="res://UI/ui-box.png" id="1_h0bm5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_31i6c"]
+texture = ExtResource("1_6joml")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6joml"]
 texture = ExtResource("1_h0bm5")
@@ -11,6 +19,7 @@ texture_margin_bottom = 4.0
 
 [resource]
 Button/font_sizes/font_size = 12
+Button/styles/hover = SubResource("StyleBoxTexture_31i6c")
 Button/styles/normal = SubResource("StyleBoxTexture_6joml")
 Label/font_sizes/font_size = 12
 TextEdit/font_sizes/font_size = 12

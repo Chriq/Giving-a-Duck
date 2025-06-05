@@ -84,4 +84,8 @@ public partial class MapManager : Node {
         return chunksToCheck.ToArray();
 
     }
+
+    public void ResetMap() {
+        loadedChunks.Clear();
+    }
 }
