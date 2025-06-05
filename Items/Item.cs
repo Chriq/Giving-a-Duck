@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public static class ItemClass {
     public static string[] ItemNames = new string[] {
@@ -29,6 +30,13 @@ public static class ItemClass {
         "k",
         "k",
         ";",
+    };
+
+    public static Dictionary<Item, string> descriptions = new() {
+        {Item.DOUBLE_JUMP, "Jump again while mid-air to go higher and farther"},
+        {Item.DASH, "Gain an instant burst of speed in the direction you are moving"},
+        {Item.WALL_JUMP, "Jump off a wall to gain a burst of speed up and away from it"},
+        {Item.CLIMB, "Climb up a sheer surface, but get tired after 5 seconds"}
     };
 }
 

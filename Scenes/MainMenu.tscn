@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://4jy7j2nlmfkd" path="res://Multiplayer/MultiplayerController.cs" id="1_8saeu"]
 [ext_resource type="Texture2D" uid="uid://byo5bji4hdi1m" path="res://UI/titleScreen.png" id="2_853f1"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("nameField")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8saeu")
+nameField = NodePath("VBoxContainer/TextEdit")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1

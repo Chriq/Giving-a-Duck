@@ -60,7 +60,6 @@ public partial class PlayerController : CharacterBody2D {
     }
 
     public void SelectState(float axis) {
-        GD.Print(IsOnWall());
         if (Input.IsActionJustPressed("Dash")) {
             machine.Set(dashState);
         }

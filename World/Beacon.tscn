@@ -18,6 +18,7 @@ animations = [{
 }]
 
 [node name="Beacon" type="Area2D"]
+collision_mask = 3
 script = ExtResource("1_swo8r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

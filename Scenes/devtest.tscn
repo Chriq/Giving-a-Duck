@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bmtawai834tg8" path="res://Scenes/TestTileset.png" id="2_44xnf"]
 [ext_resource type="PackedScene" uid="uid://dovq86syjdlsd" path="res://World/Beacon.tscn" id="3_2lock"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rkuh3"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2lock"]
 texture = ExtResource("2_44xnf")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -75,7 +75,7 @@ texture = ExtResource("2_44xnf")
 
 [sub_resource type="TileSet" id="TileSet_xlk6t"]
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_rkuh3")
+sources/0 = SubResource("TileSetAtlasSource_2lock")
 
 [node name="DevTest" type="Node2D"]
 

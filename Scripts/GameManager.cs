@@ -40,36 +40,36 @@ public partial class GameManager : Node {
     //     // TODO, send to chat
     // }
 
-    public void GiveItem(long fromPlayerId, long toPlayerId, Array<Item> items) {
+    public void GiveItem(long fromPlayerId, long toPlayerId, Item item) {
         if (!Multiplayer.IsServer()) {
-            RpcId(1, MethodName.ExecuteSend, fromPlayerId, toPlayerId, items);
+            RpcId(1, MethodName.ExecuteSend, fromPlayerId, toPlayerId, (int)item);
         } else {
-            ExecuteSend(fromPlayerId, toPlayerId, items);
+            ExecuteSend(fromPlayerId, toPlayerId, item);
         }
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    private void ExecuteSend(long fromPlayerId, long toPlayerId, Array<Item> items) {
+    private void ExecuteSend(long fromPlayerId, long toPlayerId, Item item) {
         List<Item> toPlayerItemList = players.GetValueOrDefault(toPlayerId).items;
         List<Item> fromPlayerItemList = players.GetValueOrDefault(fromPlayerId).items;
 
         // Validate that the sending player has all items to send
-        if (!items.All(fromPlayerItemList.Contains)) return;
+        if (!fromPlayerItemList.Contains(item)) return;
 
-        fromPlayerItemList.RemoveAll(items.Contains);
-        toPlayerItemList.AddRange(items);
+        fromPlayerItemList.Remove(item);
+        toPlayerItemList.Add(item);
 
-        Rpc(MethodName.SyncItems, fromPlayerId, toPlayerId, items);
+        Rpc(MethodName.SyncItems, fromPlayerId, toPlayerId, (int)item);
 
         EmitSignal(SignalName.ItemsChanged);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    private void SyncItems(long fromPlayerId, long toPlayerId, Array<Item> items) {
+    private void SyncItems(long fromPlayerId, long toPlayerId, Item item) {
         List<Item> toPlayerItemList = players.GetValueOrDefault(toPlayerId).items;
         List<Item> fromPlayerItemList = players.GetValueOrDefault(fromPlayerId).items;
 
-        fromPlayerItemList.RemoveAll(items.Contains);
-        toPlayerItemList.AddRange(items);
+        fromPlayerItemList.Remove(item);
+        toPlayerItemList.Add(item);
     }
 }

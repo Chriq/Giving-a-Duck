@@ -131,7 +131,7 @@ height = 44.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sync", "runState", "idleState", "airState", "wallState", "dashState", "sprite")]
 z_index = 100
-collision_mask = 3
+collision_layer = 2
 script = ExtResource("1_tok1r")
 sync = NodePath("MultiplayerSynchronizer")
 runState = NodePath("StateMachine/Run")

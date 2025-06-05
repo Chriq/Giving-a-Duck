@@ -8,7 +8,7 @@ public partial class MapManager : Node {
 
     private const int TILE_SIZE = 16;
     private const int CHUNK_SIZE = 32;
-    private Vector2I MAP_DIMENSIONS = new(2, 3); // (rows, cols)
+    private Vector2I MAP_DIMENSIONS = new(2, 4); // (rows, cols)
 
 
     private int currentChunk;

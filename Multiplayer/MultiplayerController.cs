@@ -11,6 +11,7 @@ public partial class MultiplayerController : Node {
     [Export] int port = 1234;
 
     [Export] bool dedicated_server = false;
+    [Export] TextEdit nameField;
 
     private ENetMultiplayerPeer peer;
 
@@ -40,7 +41,7 @@ public partial class MultiplayerController : Node {
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Waiting for players!");
-        SendPlayerInfo(Multiplayer.GetUniqueId(), "Player " + Multiplayer.GetUniqueId());
+        SendPlayerInfo(Multiplayer.GetUniqueId(), !string.IsNullOrEmpty(nameField.Text) ? nameField.Text : "Player " + Multiplayer.GetUniqueId());
     }
 
     public void Join() {
@@ -67,7 +68,7 @@ public partial class MultiplayerController : Node {
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     public void LoadGame() {
         // PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/main.tscn");
-        PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/devtest.tscn");
+        PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/test_christian.tscn");
         GetTree().ChangeSceneToPacked(scene);
     }
 
@@ -83,7 +84,7 @@ public partial class MultiplayerController : Node {
 
     // Called on client only when connected to server
     private void PlayerConnectedToServer() {
-        RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), "Player " + Multiplayer.GetUniqueId());
+        RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), !string.IsNullOrEmpty(nameField.Text) ? nameField.Text : "Player " + Multiplayer.GetUniqueId());
     }
 
     // Called on client and server when player connects

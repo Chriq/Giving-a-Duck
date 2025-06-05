@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=3 uid="uid://ba3aap8uudjpp"]
+
+[ext_resource type="Script" uid="uid://brikiagjxwtfq" path="res://UI/ChatWindow.cs" id="1_omf5b"]
+[ext_resource type="PackedScene" uid="uid://dps5eewj4vqrp" path="res://UI/UI_Prefab/ui_chat_request.tscn" id="2_q1sfd"]
+[ext_resource type="PackedScene" uid="uid://cylnkaf68fwtt" path="res://UI/UI_Prefab/ui_chat_log.tscn" id="3_0fd5w"]
+[ext_resource type="Script" uid="uid://dccaqmb4f7648" path="res://UI/ItemMenu.cs" id="4_piyqb"]
+[ext_resource type="PackedScene" uid="uid://bmtw1rukoo11f" path="res://UI/UI_Prefab/item_button.tscn" id="5_wrq7e"]
+[ext_resource type="Theme" uid="uid://br2ihpw7be7ya" path="res://UI_ChatTheme.tres" id="6_7k3ca"]
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="ChatWindow" type="Control" parent="." node_paths=PackedStringArray("chatRequestTarget", "requestButton", "itemMenu")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 216.0
+offset_top = 5.0
+offset_right = 316.0
+offset_bottom = 105.0
+script = ExtResource("1_omf5b")
+chatRequestTarget = NodePath("ChatLog Scrollable/VBox Scrollable")
+chatRequestPrefab = ExtResource("2_q1sfd")
+chatLogPrefab = ExtResource("3_0fd5w")
+requestButton = NodePath("../ItemMenu/HBoxContainer/RequestButton")
+itemMenu = NodePath("../ItemMenu")
+
+[node name="ChatLog Scrollable" type="ScrollContainer" parent="ChatWindow"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox Scrollable" type="VBoxContainer" parent="ChatWindow/ChatLog Scrollable"]
+layout_mode = 2
+
+[node name="ItemMenu" type="VBoxContainer" parent="." node_paths=PackedStringArray("itemIconButtonContainer", "itemPopupcontainer")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -40.0
+offset_right = 160.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+script = ExtResource("4_piyqb")
+itemIconButtonContainer = NodePath("HBoxContainer/ItemIconList")
+itemPopupcontainer = NodePath("ItemPopup")
+itemButton = ExtResource("5_wrq7e")
+
+[node name="ItemPopup" type="HBoxContainer" parent="ItemMenu"]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="ItemMenu/ItemPopup"]
+layout_mode = 2
+theme = ExtResource("6_7k3ca")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="ItemMenu/ItemPopup"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_7k3ca")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ItemMenu"]
+layout_mode = 2
+alignment = 1
+
+[node name="ItemIconList" type="HBoxContainer" parent="ItemMenu/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="RequestButton" type="Button" parent="ItemMenu/HBoxContainer"]
+clip_contents = true
+layout_mode = 2
+theme = ExtResource("6_7k3ca")
+text = "Request"

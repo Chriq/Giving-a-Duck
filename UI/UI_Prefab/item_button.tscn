@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmtw1rukoo11f"]
+
+[ext_resource type="Texture2D" uid="uid://bwy73m8osqwew" path="res://UI/ui-box.png" id="1_xxhtc"]
+[ext_resource type="Texture2D" uid="uid://cqdr6a5lf7spx" path="res://UI/ui-box-hover.png" id="2_do7xu"]
+
+[node name="ItemButton" type="TextureButton"]
+custom_minimum_size = Vector2(20, 20)
+texture_normal = ExtResource("1_xxhtc")
+texture_hover = ExtResource("2_do7xu")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ItemIcon" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
