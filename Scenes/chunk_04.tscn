@@ -89,6 +89,3 @@ tile_set = SubResource("TileSet_65jsn")
 
 [node name="Beacon" parent="TileMapLayer5" instance=ExtResource("2_65jsn")]
 position = Vector2(42, 312)
-
-[node name="Beacon" parent="." instance=ExtResource("2_65jsn")]
-position = Vector2(160, 102)

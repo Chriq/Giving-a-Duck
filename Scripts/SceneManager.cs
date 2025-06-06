@@ -28,4 +28,15 @@ public partial class SceneManager : Node2D {
         GameManager.Instance.InitializeItems();
     }
 
+    private Array<int> GetRandomSpawnChunks() {
+        Array<int> chunks = new();
+        for (int i = 0; i < Consts.NUM_TOTAL_CHUNKS; i++) {
+            chunks[i] = i;
+        }
+
+        chunks.Shuffle();
+
+        return chunks.Slice(0, GameManager.Instance.players.Count);
+    }
+
 }

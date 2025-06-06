@@ -8,8 +8,9 @@ public partial class GameManager : Node {
     public static GameManager Instance;
     public System.Collections.Generic.Dictionary<long, PlayerInfo> players = new();
 
-    private const int TOTAL_NUM_BEACONS = 1;
+
     public Array<string> discoveredBeacons = new();
+    private Array<Item> itemPool = new();
 
     [Signal]
     public delegate void ItemsChangedEventHandler();
@@ -19,15 +20,17 @@ public partial class GameManager : Node {
     }
 
     public void InitializeItems() {
-        int index = 0;
-        foreach (PlayerInfo p in players.Values) {
-            if (index == 0) p.items.Add(Item.DOUBLE_JUMP);
-            else p.items.Add(Item.WALL_JUMP);
-
-            index++;
+        foreach (Item i in Enum.GetValues(typeof(Item))) {
+            itemPool.Add(i);
         }
 
-        EmitSignal(SignalName.ItemsChanged);
+        foreach (PlayerInfo p in players.Values) {
+            Item item = itemPool.PickRandom();
+            p.items.Add(item);
+            itemPool.Remove(item);
+        }
+
+        //EmitSignal(SignalName.ItemsChanged);
     }
 
     // public void RequestItem(long requestPlayerId, Item item) {
@@ -75,7 +78,7 @@ public partial class GameManager : Node {
     }
 
     public void CheckBeacons() {
-        if (discoveredBeacons.Count == TOTAL_NUM_BEACONS) {
+        if (discoveredBeacons.Count == Consts.NUM_TOTAL_BEACONS) {
             GD.Print("Go To Ending");
             if (Multiplayer.IsServer()) {
                 Rpc(MethodName.ResetGame);

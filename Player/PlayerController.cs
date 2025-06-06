@@ -57,6 +57,8 @@ public partial class PlayerController : CharacterBody2D {
                 AddChild(cam);
             }
         }
+
+        Multiplayer.PeerDisconnected += DisconnectPlayer;
     }
 
     public void SelectState(float axis) {
@@ -113,5 +115,12 @@ public partial class PlayerController : CharacterBody2D {
 
     public bool HasItem(Item item) {
         return info.items.Contains(item);
+    }
+
+    private void DisconnectPlayer(long id) {
+        if (id == playerId) {
+            GameManager.Instance.players.Remove(playerId);
+            QueueFree();
+        }
     }
 }

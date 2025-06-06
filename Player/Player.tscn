@@ -146,8 +146,7 @@ replication_config = SubResource("SceneReplicationConfig_q3lat")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y8f4q")
-animation = &"fly"
-frame_progress = 0.918872
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_s1rgi")
