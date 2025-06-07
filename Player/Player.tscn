@@ -129,7 +129,7 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s1rgi"]
 height = 44.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sync", "runState", "idleState", "airState", "wallState", "dashState", "sprite")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sync", "runState", "idleState", "airState", "wallState", "dashState", "sprite", "playerLabel")]
 z_index = 100
 collision_layer = 2
 script = ExtResource("1_tok1r")
@@ -140,6 +140,7 @@ airState = NodePath("StateMachine/Air")
 wallState = NodePath("StateMachine/Wall")
 dashState = NodePath("StateMachine/Dash")
 sprite = NodePath("AnimatedSprite2D")
+playerLabel = NodePath("Label")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_q3lat")
@@ -167,3 +168,18 @@ script = ExtResource("6_6ysni")
 
 [node name="Dash" type="Node" parent="StateMachine"]
 script = ExtResource("7_vlldt")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -32.0
+offset_right = 20.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+autowrap_mode = 2

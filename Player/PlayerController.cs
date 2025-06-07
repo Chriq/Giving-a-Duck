@@ -25,6 +25,8 @@ public partial class PlayerController : CharacterBody2D {
 
     [Export] AnimatedSprite2D sprite;
 
+    [Export] Label playerLabel;
+
     private int jumps = 0;
 
 
@@ -47,6 +49,8 @@ public partial class PlayerController : CharacterBody2D {
             //cam.Zoom = new Vector2(0.1f, 0.1f);
             AddChild(cam);
         }
+
+        playerLabel.Text = !string.IsNullOrEmpty(info.name) ? info.name : "Duck " + playerId;
 
         Multiplayer.PeerDisconnected += DisconnectPlayer;
     }
