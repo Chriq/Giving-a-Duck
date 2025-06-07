@@ -102,7 +102,7 @@ public partial class MultiplayerController : Node {
     }
 
     private void DisconnectAllPlayers() {
-        GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");
+        GetTree().ChangeSceneToFile("res://Scenes/Ending.tscn");
 
         Multiplayer.MultiplayerPeer.Close();
         Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();

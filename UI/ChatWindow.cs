@@ -24,6 +24,8 @@ public partial class ChatWindow : Node {
 
     [Export] ItemMenu itemMenu;
 
+    [Export] Label doorText;
+
     System.Collections.Generic.Dictionary<itemRequestInfo, Control> itemRequestList;
 
     public override void _Ready() {
@@ -31,7 +33,14 @@ public partial class ChatWindow : Node {
         itemRequestList = new System.Collections.Generic.Dictionary<itemRequestInfo, Control>();
 
         requestButton.Pressed += OnRequest;
+
+        GameManager.Instance.AllBeaconsFound += ShowDoorText;
     }
+
+    private void ShowDoorText() {
+        doorText.Show();
+    }
+
 
     public void OnRequest() {
         requestButton.Disabled = true;

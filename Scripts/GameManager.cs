@@ -15,6 +15,9 @@ public partial class GameManager : Node {
     [Signal]
     public delegate void ItemsChangedEventHandler();
 
+    [Signal]
+    public delegate void AllBeaconsFoundEventHandler();
+
     public override void _Ready() {
         Instance = this;
     }
@@ -80,15 +83,31 @@ public partial class GameManager : Node {
         EmitSignal(SignalName.ItemsChanged);
     }
 
+    public void UpdateBeacons(String path) {
+        Rpc(MethodName.UpdateGlobalBeacons, path);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+    public void UpdateGlobalBeacons(String path) {
+        discoveredBeacons.Add(path);
+    }
+
     public void CheckBeacons() {
         if (discoveredBeacons.Count == Consts.NUM_TOTAL_BEACONS) {
-            GD.Print("Go To Ending");
-            if (Multiplayer.IsServer()) {
-                Rpc(MethodName.ResetGame);
-            } else {
-                ResetGame();
-            }
+            Rpc(MethodName.RemoteEmit);
+        }
+    }
 
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+    private void RemoteEmit() {
+        EmitSignal(SignalName.AllBeaconsFound);
+    }
+
+    public void EndGame() {
+        if (Multiplayer.IsServer()) {
+            Rpc(MethodName.ResetGame);
+        } else {
+            ResetGame();
         }
     }
 
@@ -98,7 +117,7 @@ public partial class GameManager : Node {
     }
 
     private void DeferredResetGame() {
-        GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");
+        GetTree().ChangeSceneToFile("res://Scenes/Ending.tscn");
 
         ClearAllData();
 
