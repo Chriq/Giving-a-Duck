@@ -23,8 +23,6 @@ public partial class PlayerController : CharacterBody2D {
     [Export] WallState wallState;
     [Export] DashState dashState;
 
-    [Export] bool dev = false;
-
     [Export] AnimatedSprite2D sprite;
 
     private int jumps = 0;
@@ -42,27 +40,19 @@ public partial class PlayerController : CharacterBody2D {
         machine = new();
         machine.Set(idleState);
 
-        if (dev) {
-            playerId = 1;
-            PlayerInfo devInfo = new(1, "test");
-            List<Item> allItemList = ((Item[])Enum.GetValues(typeof(Item))).ToList();
-            devInfo.items.AddRange(allItemList);
-            GameManager.Instance.players.Add(1, devInfo);
-        } else {
-            if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) {
-                MapManager.Instance.UpdateActive(GlobalPosition);
+        if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) {
+            MapManager.Instance.UpdateActive(GlobalPosition);
 
-                Camera2D cam = new Camera2D();
-                //cam.Zoom = new Vector2(0.1f, 0.1f);
-                AddChild(cam);
-            }
+            Camera2D cam = new Camera2D();
+            //cam.Zoom = new Vector2(0.1f, 0.1f);
+            AddChild(cam);
         }
 
         Multiplayer.PeerDisconnected += DisconnectPlayer;
     }
 
     public void SelectState(float axis) {
-        if (Input.IsActionJustPressed("Dash")) {
+        if (Input.IsActionJustPressed("Dash") && info.items.Contains(Item.DASH)) {
             machine.Set(dashState);
         }
 
@@ -72,7 +62,7 @@ public partial class PlayerController : CharacterBody2D {
             } else {
                 machine.Set(runState);
             }
-        } else if (IsOnWall() && info.items.Contains(Item.WALL_JUMP)) {
+        } else if (IsOnWall() && (info.items.Contains(Item.WALL_JUMP) || info.items.Contains(Item.CLIMB))) {
             machine.Set(wallState);
         } else {
             machine.Set(airState);
@@ -81,10 +71,10 @@ public partial class PlayerController : CharacterBody2D {
 
 
     public override void _PhysicsProcess(double delta) {
-        if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId() || dev) {
+        if (sync.GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) {
             HandleJump();
             Move((float)delta);
-            if (!dev) MapManager.Instance.UpdateActive(GlobalPosition);
+            MapManager.Instance.UpdateActive(GlobalPosition);
         }
     }
 

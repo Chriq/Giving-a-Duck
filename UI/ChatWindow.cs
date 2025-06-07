@@ -27,22 +27,22 @@ public partial class ChatWindow : Node {
     System.Collections.Generic.Dictionary<itemRequestInfo, Control> itemRequestList;
 
     public override void _Ready() {
+        requestButton.Disabled = true;
         itemRequestList = new System.Collections.Generic.Dictionary<itemRequestInfo, Control>();
-        // GameManager.Instance.ItemsChanged += UpdateSendableItems;
 
         requestButton.Pressed += OnRequest;
     }
 
     public void OnRequest() {
-        // TODO : Use player name instead of uniqueID
+        requestButton.Disabled = true;
         int chunk = 0; // TODO : Retrieve chunk location of current player
-        Item item = itemMenu.selected;
+        Item item = (Item)itemMenu.selected;
 
         Rpc(MethodName.ExecuteRequest, Multiplayer.GetUniqueId(), chunk, (int)item);
     }
+
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     public void ExecuteRequest(int playerId, int chunk, int item) {
-
         Control node;
 
         if (playerId == Multiplayer.GetUniqueId()) {
@@ -55,11 +55,10 @@ public partial class ChatWindow : Node {
 
             Label rq_label = node.GetNode<Label>("RequestLabel");
             string nameDisplay = GameManager.Instance.players[playerId].name;
-            GD.Print(nameDisplay);
             rq_label.Text = $"{(!string.IsNullOrEmpty(nameDisplay) ? nameDisplay : "Player " + playerId)} request from chunk {chunk}: {item}.";
 
-            Button rq_button = node.GetNode<Button>("SendButton");
-            rq_button.Pressed += () => {
+            Button send_button = node.GetNode<Button>("SendButton");
+            send_button.Pressed += () => {
                 OnSend(playerId, item);
                 CallDeferred(MethodName.RemoveCompletedRequest, node);
             };
@@ -68,32 +67,28 @@ public partial class ChatWindow : Node {
         chatRequestTarget.AddChild(node);
     }
 
-    public void OnSend(int playerId, int item) {
+    public void OnSend(int toPlayerId, int item) {
         if (Multiplayer.IsServer()) {
-            ExecuteSend(Multiplayer.GetUniqueId(), playerId, item);
+            GD.Print(Multiplayer.GetUniqueId() + " sending item to " + toPlayerId);
+            ExecuteSend(Multiplayer.GetUniqueId(), toPlayerId, item);
         } else {
-            RpcId(1, MethodName.ExecuteSend, Multiplayer.GetUniqueId(), playerId, item);
+            RpcId(1, MethodName.ExecuteSend, Multiplayer.GetUniqueId(), toPlayerId, item);
         }
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void ExecuteSend(int completerID, int playerId, int item) {
-        itemRequestInfo rq = new itemRequestInfo(playerId, item);
+    public void ExecuteSend(int fromPlayerId, int toPlayerId, int item) {
+        itemRequestInfo rq = new itemRequestInfo(toPlayerId, item);
 
         if (itemRequestList.ContainsKey(rq)) {
-            Rpc(MethodName.CompleteSend, completerID, playerId, item);
+            Rpc(MethodName.CompleteSend, fromPlayerId, toPlayerId, item);
         }
         itemRequestList.Remove(rq);
     }
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-    public void CompleteSend(int completerID, int playerId, Item item) {
-        GD.Print($"Send ({playerId}, {item}) was completed by ({completerID})");
-        GameManager.Instance.GiveItem(Multiplayer.GetUniqueId(), playerId, item);
 
-        // TODO: Remove From chat window
-
-        // TODO: Update Item Lists
-
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void CompleteSend(int fromPlayerId, int toPlayerId, Item item) {
+        GameManager.Instance.GiveItem(fromPlayerId, toPlayerId, item);
     }
 
     private void RemoveCompletedRequest(Control control) {

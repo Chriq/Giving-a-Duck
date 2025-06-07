@@ -20,29 +20,34 @@ public partial class GameManager : Node {
     }
 
     public void InitializeItems() {
-        foreach (Item i in Enum.GetValues(typeof(Item))) {
-            itemPool.Add(i);
+
+        // if (!Multiplayer.IsServer()) {
+        //     RpcId(1, MethodName.InitializeRemoteItems, , (int)item);
+        // } else {
+        //     InitializeRemoteItems(fromPlayerId, toPlayerId, item);
+        // }
+
+
+        foreach (Item item in Enum.GetValues(typeof(Item))) {
+            itemPool.Add(item);
         }
 
-        foreach (PlayerInfo p in players.Values) {
-            Item item = itemPool.PickRandom();
-            p.items.Add(item);
-            itemPool.Remove(item);
-        }
+        if (Multiplayer.IsServer()) {
+            itemPool.Shuffle();
 
-        //EmitSignal(SignalName.ItemsChanged);
+            foreach (PlayerInfo p in players.Values) {
+                Item item = itemPool[0];
+                Rpc(MethodName.InitializeRemoteItems, p.id, (int)item);
+            }
+        }
     }
 
-    // public void RequestItem(long requestPlayerId, Item item) {
-    //     int chunk = 0;
-    //     Rpc(MethodName.ExecuteRequest, Multiplayer.GetUniqueId(), chunk, (int)item);
-    // }
-
-
-    // [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    // private void ExecuteRequest(long requestPlayerId, int chunk, int item) {
-    //     // TODO, send to chat
-    // }
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+    private void InitializeRemoteItems(long playerId, Item item) {
+        players[playerId].items.Add(item);
+        itemPool.Remove(item);
+        EmitSignal(SignalName.ItemsChanged);
+    }
 
     public void GiveItem(long fromPlayerId, long toPlayerId, Item item) {
         if (!Multiplayer.IsServer()) {
@@ -54,27 +59,25 @@ public partial class GameManager : Node {
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     private void ExecuteSend(long fromPlayerId, long toPlayerId, Item item) {
-        List<Item> toPlayerItemList = players.GetValueOrDefault(toPlayerId).items;
-        List<Item> fromPlayerItemList = players.GetValueOrDefault(fromPlayerId).items;
-
-        // Validate that the sending player has all items to send
-        if (!fromPlayerItemList.Contains(item)) return;
-
-        fromPlayerItemList.Remove(item);
-        toPlayerItemList.Add(item);
-
         Rpc(MethodName.SyncItems, fromPlayerId, toPlayerId, (int)item);
-
-        EmitSignal(SignalName.ItemsChanged);
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    [Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true)]
     private void SyncItems(long fromPlayerId, long toPlayerId, Item item) {
-        List<Item> toPlayerItemList = players.GetValueOrDefault(toPlayerId).items;
-        List<Item> fromPlayerItemList = players.GetValueOrDefault(fromPlayerId).items;
+        List<Item> toPlayerItemList = players[toPlayerId].items;
+        List<Item> fromPlayerItemList = players[fromPlayerId].items;
+
+        // Validate that the sending player has all items to send
+        if (!fromPlayerItemList.Contains(item)) {
+            GD.Print("ERROR! Sending player does not have item!");
+            return;
+        }
 
         fromPlayerItemList.Remove(item);
         toPlayerItemList.Add(item);
+
+        GD.Print($"Send ({toPlayerId}, {item}) was completed by ({fromPlayerId})");
+        EmitSignal(SignalName.ItemsChanged);
     }
 
     public void CheckBeacons() {
@@ -107,5 +110,9 @@ public partial class GameManager : Node {
         MapManager.Instance.ResetMap();
         discoveredBeacons.Clear();
         players.Clear();
+    }
+
+    public bool ClientHasItem(Item i) {
+        return players[Multiplayer.GetUniqueId()].items.Contains(i);
     }
 }

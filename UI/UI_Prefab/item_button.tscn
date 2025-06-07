@@ -1,23 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmtw1rukoo11f"]
+[gd_scene load_steps=5 format=3 uid="uid://bmtw1rukoo11f"]
 
 [ext_resource type="Texture2D" uid="uid://bwy73m8osqwew" path="res://UI/ui-box.png" id="1_xxhtc"]
 [ext_resource type="Texture2D" uid="uid://cqdr6a5lf7spx" path="res://UI/ui-box-hover.png" id="2_do7xu"]
+[ext_resource type="Texture2D" uid="uid://c8dshdnsgw0cg" path="res://UI/DOUBLE_JUMP.png" id="3_do7xu"]
+[ext_resource type="Texture2D" uid="uid://d3x88ujtve5to" path="res://UI/ui-box-disable.png" id="3_lkckf"]
 
 [node name="ItemButton" type="TextureButton"]
-custom_minimum_size = Vector2(20, 20)
+custom_minimum_size = Vector2(24, 24)
+offset_right = 24.0
+offset_bottom = 24.0
 texture_normal = ExtResource("1_xxhtc")
 texture_hover = ExtResource("2_do7xu")
+texture_disabled = ExtResource("3_lkckf")
+texture_focused = ExtResource("2_do7xu")
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="ItemIcon" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = -2.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.5
+offset_top = -8.5
+offset_right = 8.5
+offset_bottom = 7.5
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("3_do7xu")
+stretch_mode = 2

@@ -81,7 +81,6 @@ sources/0 = SubResource("TileSetAtlasSource_2lock")
 
 [node name="Player" parent="." instance=ExtResource("1_lahw8")]
 position = Vector2(113, 595)
-dev = true
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-1, -48)

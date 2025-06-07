@@ -40,15 +40,16 @@ horizontal_scroll_mode = 0
 [node name="VBox Scrollable" type="VBoxContainer" parent="ChatWindow/ChatLog Scrollable"]
 layout_mode = 2
 
-[node name="ItemMenu" type="VBoxContainer" parent="." node_paths=PackedStringArray("itemIconButtonContainer", "itemPopupcontainer")]
+[node name="ItemMenu" type="VBoxContainer" parent="." node_paths=PackedStringArray("itemIconButtonContainer", "itemPopupcontainer", "requestButton")]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -160.0
-offset_top = -40.0
+offset_top = -30.0
 offset_right = 160.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
@@ -56,6 +57,7 @@ script = ExtResource("4_piyqb")
 itemIconButtonContainer = NodePath("HBoxContainer/ItemIconList")
 itemPopupcontainer = NodePath("ItemPopup")
 itemButton = ExtResource("5_wrq7e")
+requestButton = NodePath("HBoxContainer/RequestButton")
 
 [node name="ItemPopup" type="HBoxContainer" parent="ItemMenu"]
 layout_mode = 2
@@ -75,6 +77,7 @@ horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ItemMenu"]
 layout_mode = 2
+size_flags_vertical = 3
 alignment = 1
 
 [node name="ItemIconList" type="HBoxContainer" parent="ItemMenu/HBoxContainer"]

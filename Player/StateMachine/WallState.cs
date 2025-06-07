@@ -36,7 +36,7 @@ public partial class WallState : State {
         float xStickToWall = rb.Velocity.X + rb.GetWallNormal().X * -1f;
         float yFrictionGravity = Mathf.Lerp(rb.Velocity.Y, 0f, friction);
         rb.Velocity = new Vector2(xStickToWall, yFrictionGravity);
-        if (Input.IsActionJustPressed("Jump")) {
+        if (Input.IsActionJustPressed("Jump") && rb.HasItem(Item.WALL_JUMP)) {
             WallJump();
             complete = true;
         }

@@ -42,7 +42,6 @@ public partial class MultiplayerController : Node {
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Waiting for players!");
         SendPlayerInfo(Multiplayer.GetUniqueId(), GetPlayerName());
-        GD.Print(Multiplayer.GetPeers().Length);
     }
 
     public void Join() {
@@ -51,7 +50,6 @@ public partial class MultiplayerController : Node {
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Player connected!");
-        GD.Print(Multiplayer.GetPeers().Length);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
