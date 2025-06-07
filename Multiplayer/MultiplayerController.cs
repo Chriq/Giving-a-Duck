@@ -31,7 +31,7 @@ public partial class MultiplayerController : Node {
 
     public void Host() {
         peer = new ENetMultiplayerPeer();
-        Error error = peer.CreateServer(port, 32, 0, 0, 0);
+        Error error = peer.CreateServer(port, 4, 0, 0, 0);
         if (error != Error.Ok) {
             GD.PrintErr("Error creating Host: " + error);
             return;

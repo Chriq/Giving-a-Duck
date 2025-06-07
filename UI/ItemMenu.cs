@@ -7,7 +7,6 @@ public partial class ItemMenu : Node {
     [Export] private Control itemPopupcontainer;
     [Export] private PackedScene itemButton;
     [Export] private Button requestButton;
-    //private Godot.Collections.Array<Node> itemIconButtons = new();
     private Dictionary<Item, TextureButton> itemIconButtons = new();
 
     public Item selected;
@@ -30,6 +29,11 @@ public partial class ItemMenu : Node {
 
         GameManager.Instance.ItemsChanged += UpdateItems;
     }
+
+    public override void _ExitTree() {
+        GameManager.Instance.ItemsChanged -= UpdateItems;
+    }
+
 
     public void SelectItem(Item item) {
         if (!GameManager.Instance.ClientHasItem(item)) {
