@@ -55,7 +55,7 @@ public partial class ItemMenu : Node {
         Label labelName = itemPopupcontainer.GetChild<Label>(0); // Set string
         Label labelDescription = itemPopupcontainer.GetChild<Label>(1);
 
-        labelName.Text = Enum.GetName(item).Replace("_", " ");
+        labelName.Text = ItemClass.GetItemName(item);
         labelDescription.Text = ItemClass.descriptions[item];
 
         if (GameManager.Instance.ClientHasItem(item)) {

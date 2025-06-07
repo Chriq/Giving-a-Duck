@@ -11,7 +11,7 @@ public partial class MapManager : Node {
     private Vector2I MAP_DIMENSIONS = new(2, 4); // (rows, cols)
 
 
-    private int currentChunk;
+    public int currentChunk { get; private set; }
     private Dictionary<int, Node> loadedChunks = new();
 
     public override void _Ready() {

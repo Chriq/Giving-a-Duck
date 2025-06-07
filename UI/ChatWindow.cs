@@ -35,7 +35,7 @@ public partial class ChatWindow : Node {
 
     public void OnRequest() {
         requestButton.Disabled = true;
-        int chunk = 0; // TODO : Retrieve chunk location of current player
+        int chunk = MapManager.Instance.currentChunk;
         Item item = (Item)itemMenu.selected;
 
         Rpc(MethodName.ExecuteRequest, Multiplayer.GetUniqueId(), chunk, (int)item);
@@ -49,19 +49,23 @@ public partial class ChatWindow : Node {
             node = chatLogPrefab.Instantiate<Control>();
             Label rq_label = node.GetNode<Label>("RequestLabel");
 
-            rq_label.Text = $"You requested {item} from chunk {chunk}.";
+            rq_label.Text = $"You requested {ItemClass.GetItemName((Item)item)} from chunk {chunk}.";
         } else {
             node = chatRequestPrefab.Instantiate<Control>();
 
             Label rq_label = node.GetNode<Label>("RequestLabel");
             string nameDisplay = GameManager.Instance.players[playerId].name;
-            rq_label.Text = $"{(!string.IsNullOrEmpty(nameDisplay) ? nameDisplay : "Player " + playerId)} request from chunk {chunk}: {item}.";
+            rq_label.Text = $"Will you give {(!string.IsNullOrEmpty(nameDisplay) ? nameDisplay : "Player " + playerId)} in Chunk {chunk} a {ItemClass.GetItemName((Item)item)}?";
 
             Button send_button = node.GetNode<Button>("SendButton");
-            send_button.Pressed += () => {
-                OnSend(playerId, item);
-                CallDeferred(MethodName.RemoveCompletedRequest, node);
-            };
+            if (GameManager.Instance.ClientHasItem((Item)item)) {
+                send_button.Pressed += () => {
+                    OnSend(playerId, item);
+                    CallDeferred(MethodName.RemoveCompletedRequest, node);
+                };
+            } else {
+                send_button.Disabled = true;
+            }
         }
         itemRequestList.Add(new itemRequestInfo(playerId, item), node);
         chatRequestTarget.AddChild(node);
