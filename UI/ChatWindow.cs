@@ -36,6 +36,7 @@ public partial class ChatWindow : Node {
 
         GameManager.Instance.UpdateBeaconsFound += UpdateBeacons;
         GameManager.Instance.AllBeaconsFound += UpdateBeacons;
+        UpdateBeacons();
     }
 
     private void UpdateBeacons() {

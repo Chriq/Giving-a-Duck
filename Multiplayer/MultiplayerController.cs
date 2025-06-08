@@ -8,7 +8,7 @@ public partial class MultiplayerController : Node {
     public static MultiplayerController Instance;
 
     [Export] string address = "127.0.0.1";
-    [Export] int port = 1234;
+    [Export] int port = 38257;
 
     [Export] bool dedicated_server = false;
 
@@ -41,12 +41,17 @@ public partial class MultiplayerController : Node {
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Waiting for players!");
-        SendPlayerInfo(Multiplayer.GetUniqueId(), GetPlayerName());
+
+        if (!OS.HasFeature("dedicated_server")) {
+            SendPlayerInfo(Multiplayer.GetUniqueId(), GetPlayerName());
+        }
     }
 
     public void Join() {
+        string ip = (GetTree().CurrentScene as MultiplayerMenu).GetIP();
+
         peer = new ENetMultiplayerPeer();
-        peer.CreateClient(address, port);
+        peer.CreateClient(!string.IsNullOrEmpty(ip) ? ip : address, port);
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Player connected!");

@@ -78,7 +78,6 @@ public partial class GameManager : Node {
     }
 
     public void UpdateBeacons(string path) {
-        GD.Print("UPDATING BEACONS FROM SERVER");
         if (!Multiplayer.IsServer()) {
             RpcId(1, MethodName.UpdateGlobalBeacons, path);
         } else {
@@ -140,6 +139,10 @@ public partial class GameManager : Node {
     }
 
     public bool ClientHasItem(Item i) {
-        return players[Multiplayer.GetUniqueId()].items.Contains(i);
+        if (!OS.HasFeature("dedicated_server")) {
+            return players[Multiplayer.GetUniqueId()].items.Contains(i);
+        }
+
+        return false;
     }
 }

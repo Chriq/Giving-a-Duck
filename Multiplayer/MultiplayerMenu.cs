@@ -6,6 +6,7 @@ public partial class MultiplayerMenu : Control {
     [Export] Button host;
     [Export] Button join;
     [Export] Button start;
+    [Export] TextEdit ipInput;
 
     public override void _Ready() {
         base._Ready();
@@ -33,5 +34,9 @@ public partial class MultiplayerMenu : Control {
 
     public string GetPlayerName() {
         return nameInput.Text;
+    }
+
+    public string GetIP() {
+        return ipInput.Text;
     }
 }

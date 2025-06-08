@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b5o4lc4g44urn" path="res://Multiplayer/MultiplayerMenu.cs" id="1_853f1"]
 [ext_resource type="Texture2D" uid="uid://byo5bji4hdi1m" path="res://UI/titleScreen.png" id="2_853f1"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("nameInput", "host", "join", "start")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("nameInput", "host", "join", "start", "ipInput")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,10 +11,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_853f1")
-nameInput = NodePath("VBoxContainer/TextEdit")
+nameInput = NodePath("VBoxContainer/Name")
 host = NodePath("VBoxContainer/HBoxContainer/Host")
-join = NodePath("VBoxContainer/HBoxContainer/Join")
+join = NodePath("VBoxContainer/HBoxContainer2/Join")
 start = NodePath("VBoxContainer/HBoxContainer/Start")
+ipInput = NodePath("VBoxContainer/HBoxContainer2/IP")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -41,10 +42,24 @@ grow_horizontal = 2
 grow_vertical = 0
 alignment = 2
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 22)
+[node name="Name" type="TextEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
+theme_override_font_sizes/font_size = 8
 placeholder_text = "Your Name"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="IP" type="TextEdit" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+placeholder_text = "IP Address"
+
+[node name="Join" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "JOIN"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -54,11 +69,6 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 text = "HOST"
-
-[node name="Join" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "JOIN"
 
 [node name="Start" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
