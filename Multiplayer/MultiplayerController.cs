@@ -85,7 +85,11 @@ public partial class MultiplayerController : Node {
     }
 
     public void Start() {
-        Rpc(MethodName.LoadGame);
+        if (GameManager.Instance.players.Count < 4) {
+            (GetTree().CurrentScene as MultiplayerMenu).NotEnoughPlayers();
+        } else {
+            Rpc(MethodName.LoadGame);
+        }
     }
 
     // Called on client only when connection fails

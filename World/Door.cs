@@ -15,8 +15,11 @@ public partial class Door : Area2D {
         BodyEntered += OnEnter;
     }
 
-    private void OpenDoor() {
+    public override void _ExitTree() {
         GameManager.Instance.AllBeaconsFound -= OpenDoor;
+    }
+
+    private void OpenDoor() {
         sprite.Frame = 1;
         open = true;
     }

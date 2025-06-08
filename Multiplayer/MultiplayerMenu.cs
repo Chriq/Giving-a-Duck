@@ -9,6 +9,9 @@ public partial class MultiplayerMenu : Control {
     [Export] TextEdit ipInput;
     [Export] Label errorLabel;
 
+    [Export] VSlider volume;
+    [Export] Button mute;
+
     public override void _Ready() {
         base._Ready();
         host.Pressed += Host;
@@ -16,6 +19,9 @@ public partial class MultiplayerMenu : Control {
         start.Pressed += Start;
 
         start.Disabled = true;
+
+        OnVolumeChanged((float)volume.Value);
+        mute.Pressed += Mute;
     }
 
     private void Host() {
@@ -66,5 +72,17 @@ public partial class MultiplayerMenu : Control {
     public void OnJoinConnected() {
         errorLabel.Text = "Connected to Host!";
         start.Disabled = false;
+    }
+
+    public void NotEnoughPlayers() {
+        errorLabel.Text = $"This game requires 4 players. Only {GameManager.Instance.players.Count} have joined.";
+    }
+
+    public void OnVolumeChanged(float value) {
+        AudioServer.SetBusVolumeLinear(0, value);
+    }
+
+    public void Mute() {
+        volume.Value = 0;
     }
 }

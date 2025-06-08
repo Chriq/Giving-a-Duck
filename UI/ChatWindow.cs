@@ -76,7 +76,7 @@ public partial class ChatWindow : Node {
             if (GameManager.Instance.ClientHasItem((Item)item)) {
                 send_button.Pressed += () => {
                     OnSend(playerId, item);
-                    CallDeferred(MethodName.RemoveCompletedRequest, node);
+                    //CallDeferred(MethodName.RemoveCompletedRequest, node);
                 };
             } else {
                 send_button.Disabled = true;
@@ -84,6 +84,11 @@ public partial class ChatWindow : Node {
         }
         itemRequestList.Add(new itemRequestInfo(playerId, item), node);
         chatRequestTarget.AddChild(node);
+
+        // if (chatRequestTarget.GetChildCount() > 5) {
+        //     Control c = chatRequestTarget.GetChild<Control>(0);
+        //     itemRequestList.GetKey
+        // }
     }
 
     public void OnSend(int toPlayerId, int item) {
@@ -95,6 +100,15 @@ public partial class ChatWindow : Node {
         }
     }
 
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+    private void RemoveFromList(int playerId, int item) {
+        itemRequestInfo rq = new itemRequestInfo(playerId, item);
+        if (itemRequestList.ContainsKey(rq)) {
+            itemRequestList[rq].QueueFree();
+            itemRequestList.Remove(rq);
+        }
+    }
+
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     public void ExecuteSend(int fromPlayerId, int toPlayerId, int item) {
         itemRequestInfo rq = new itemRequestInfo(toPlayerId, item);
@@ -102,7 +116,8 @@ public partial class ChatWindow : Node {
         if (itemRequestList.ContainsKey(rq)) {
             Rpc(MethodName.CompleteSend, fromPlayerId, toPlayerId, item);
         }
-        itemRequestList.Remove(rq);
+
+        Rpc(MethodName.RemoveFromList, rq.playerId, rq.item);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]

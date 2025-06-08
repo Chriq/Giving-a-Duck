@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b5o4lc4g44urn" path="res://Multiplayer/MultiplayerMenu.cs" id="1_853f1"]
 [ext_resource type="Texture2D" uid="uid://byo5bji4hdi1m" path="res://UI/titleScreen.png" id="2_853f1"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("nameInput", "host", "join", "start", "ipInput", "errorLabel")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("nameInput", "host", "join", "start", "ipInput", "errorLabel", "volume", "mute")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,6 +17,8 @@ join = NodePath("VBoxContainer/HBoxContainer2/Join")
 start = NodePath("VBoxContainer/HBoxContainer/Start")
 ipInput = NodePath("VBoxContainer/HBoxContainer2/IP")
 errorLabel = NodePath("VBoxContainer/Error")
+volume = NodePath("Sound/Volume")
+mute = NodePath("Sound/Mute")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -80,3 +82,31 @@ text = "HOST"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "START"
+
+[node name="Sound" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -25.0
+offset_top = -97.0
+offset_right = -9.0
+offset_bottom = -7.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 2
+
+[node name="Volume" type="VSlider" parent="Sound"]
+layout_mode = 2
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="Mute" type="Button" parent="Sound"]
+layout_mode = 2
+text = "X"
+
+[connection signal="value_changed" from="Sound/Volume" to="." method="OnVolumeChanged"]

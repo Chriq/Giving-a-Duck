@@ -33,10 +33,10 @@ public static class ItemClass {
     };
 
     public static Dictionary<Item, string> descriptions = new() {
-        {Item.DOUBLE_JUMP, "Jump again while mid-air to go higher and farther"},
-        {Item.DASH, "Gain an instant burst of speed in the direction you are moving"},
-        {Item.WALL_JUMP, "Jump off a wall to gain a burst of speed up and away from it"},
-        {Item.CLIMB, "Climb up a sheer surface, but get tired after 8 tiles"}
+        {Item.DOUBLE_JUMP, "Jump again while mid-air to go higher and farther [SPACE]"},
+        {Item.DASH, "Gain an instant burst of speed in the direction you are moving [SHIFT]"},
+        {Item.WALL_JUMP, "Jump off a wall to gain a burst of speed up and away from it [SPACE]"},
+        {Item.CLIMB, "Climb up a sheer surface, but get tired after 8 tiles [W]"}
     };
 
     public static string GetItemName(Item item) {
