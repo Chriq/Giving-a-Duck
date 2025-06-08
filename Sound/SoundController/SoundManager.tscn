@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://y0rpm7kbjq7k"]
+
+[ext_resource type="Script" uid="uid://cfwrno2tk1mg7" path="res://Sound/SoundController/SoundManager.cs" id="1_cqva8"]
+[ext_resource type="AudioStream" uid="uid://diuhqu0j0ymq8" path="res://Sound/PathOfTheDucks.wav" id="2_cypoi"]
+
+[node name="SoundManager" type="Node2D" node_paths=PackedStringArray("backgroundMusicPlayer", "soundEffectsPlayer")]
+script = ExtResource("1_cqva8")
+backgroundMusicPlayer = NodePath("AudioStreamPlayer")
+soundEffectsPlayer = NodePath("SoundEffectsPlayer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_cypoi")
+volume_db = -80.0
+autoplay = true
+
+[node name="SoundEffectsPlayer" type="AudioStreamPlayer" parent="."]
