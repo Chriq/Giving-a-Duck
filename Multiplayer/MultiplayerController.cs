@@ -29,12 +29,12 @@ public partial class MultiplayerController : Node {
         }
     }
 
-    public void Host() {
+    public bool Host() {
         peer = new ENetMultiplayerPeer();
         Error error = peer.CreateServer(port, 4, 0, 0, 0);
         if (error != Error.Ok) {
             GD.PrintErr("Error creating Host: " + error);
-            return;
+            return false;
         }
 
         // Use compression to prioritize bandwidth vs CPU usage
@@ -45,16 +45,24 @@ public partial class MultiplayerController : Node {
         if (!OS.HasFeature("dedicated_server")) {
             SendPlayerInfo(Multiplayer.GetUniqueId(), GetPlayerName());
         }
+
+        return true;
     }
 
-    public void Join() {
+    public bool Join() {
         string ip = (GetTree().CurrentScene as MultiplayerMenu).GetIP();
 
         peer = new ENetMultiplayerPeer();
-        peer.CreateClient(!string.IsNullOrEmpty(ip) ? ip : address, port);
+        Error error = peer.CreateClient(!string.IsNullOrEmpty(ip) ? ip : address, port);
+
+        if (error != Error.Ok) {
+            return false;
+        }
+
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Player connected!");
+        return true;
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -89,6 +97,7 @@ public partial class MultiplayerController : Node {
     // Called on client only when connected to server
     private void PlayerConnectedToServer() {
         RpcId(1, MethodName.SendPlayerInfo, Multiplayer.GetUniqueId(), GetPlayerName());
+        (GetTree().CurrentScene as MultiplayerMenu).OnJoinConnected();
     }
 
     // Called on client and server when player connects

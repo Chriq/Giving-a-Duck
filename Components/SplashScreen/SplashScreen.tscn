@@ -18,7 +18,6 @@ fade = NodePath("ColorRect")
 scene = ExtResource("2_hvfi2")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
