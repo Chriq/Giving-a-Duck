@@ -36,7 +36,7 @@ public static class ItemClass {
         {Item.DOUBLE_JUMP, "Jump again while mid-air to go higher and farther"},
         {Item.DASH, "Gain an instant burst of speed in the direction you are moving"},
         {Item.WALL_JUMP, "Jump off a wall to gain a burst of speed up and away from it"},
-        {Item.CLIMB, "Climb up a sheer surface, but get tired after 5 seconds"}
+        {Item.CLIMB, "Climb up a sheer surface, but get tired after 8 tiles"}
     };
 
     public static string GetItemName(Item item) {

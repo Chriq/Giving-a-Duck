@@ -22,8 +22,9 @@ public partial class Beacon : Area2D {
             sprite.Play("discover");
             sprite.AnimationFinished += () => light.Show();
 
-            GameManager.Instance.UpdateBeacons(GetPath());
-            GameManager.Instance.CheckBeacons();
+            if ((n as PlayerController).playerId == Multiplayer.GetUniqueId()) {
+                GameManager.Instance.UpdateBeacons(GetPath());
+            }
         }
     }
 }

@@ -67,7 +67,6 @@ public partial class MultiplayerController : Node {
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     public void LoadGame() {
-        // PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/main.tscn");
         PackedScene scene = ResourceLoader.Load<PackedScene>("res://Scenes/test_christian.tscn");
         GetTree().ChangeSceneToPacked(scene);
     }

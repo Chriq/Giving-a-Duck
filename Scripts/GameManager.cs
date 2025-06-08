@@ -17,20 +17,14 @@ public partial class GameManager : Node {
 
     [Signal]
     public delegate void AllBeaconsFoundEventHandler();
+    [Signal]
+    public delegate void UpdateBeaconsFoundEventHandler();
 
     public override void _Ready() {
         Instance = this;
     }
 
     public void InitializeItems() {
-
-        // if (!Multiplayer.IsServer()) {
-        //     RpcId(1, MethodName.InitializeRemoteItems, , (int)item);
-        // } else {
-        //     InitializeRemoteItems(fromPlayerId, toPlayerId, item);
-        // }
-
-
         foreach (Item item in Enum.GetValues(typeof(Item))) {
             itemPool.Add(item);
         }
@@ -83,13 +77,27 @@ public partial class GameManager : Node {
         EmitSignal(SignalName.ItemsChanged);
     }
 
-    public void UpdateBeacons(String path) {
-        Rpc(MethodName.UpdateGlobalBeacons, path);
+    public void UpdateBeacons(string path) {
+        GD.Print("UPDATING BEACONS FROM SERVER");
+        if (!Multiplayer.IsServer()) {
+            RpcId(1, MethodName.UpdateGlobalBeacons, path);
+        } else {
+            UpdateGlobalBeacons(path);
+        }
+
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-    public void UpdateGlobalBeacons(String path) {
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void UpdateGlobalBeacons(string path) {
+        Rpc(MethodName.UpdateRemoteBeacons, path);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true)]
+    public void UpdateRemoteBeacons(string path) {
+        GD.Print($"Adding {path} to discoveredBeacons on {Multiplayer.GetUniqueId()}");
         discoveredBeacons.Add(path);
+        EmitSignal(SignalName.UpdateBeaconsFound);
+        CheckBeacons();
     }
 
     public void CheckBeacons() {

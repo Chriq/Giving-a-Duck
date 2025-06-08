@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="TGCJam"
-run/main_scene="uid://dq8xdp1vhqq55"
+run/main_scene="uid://d4r5c28iri6j"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 

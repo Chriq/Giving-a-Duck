@@ -12,8 +12,11 @@ public partial class WallState : State {
 
     private double frameBuffer = 0;
 
+    private double timer = 0d;
+
     public override void Enter() {
         animator.Play("idle");
+        timer = 0;
     }
 
 
@@ -41,7 +44,8 @@ public partial class WallState : State {
             complete = true;
         }
 
-        if (Input.IsActionPressed("Up") && rb.HasItem(Item.CLIMB)) {
+        if (Input.IsActionPressed("Up") && rb.HasItem(Item.CLIMB) && timer < 2) {
+            timer += delta;
             Climb();
         }
     }

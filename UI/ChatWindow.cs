@@ -24,7 +24,7 @@ public partial class ChatWindow : Node {
 
     [Export] ItemMenu itemMenu;
 
-    [Export] Label doorText;
+    [Export] Label beaconText;
 
     System.Collections.Generic.Dictionary<itemRequestInfo, Control> itemRequestList;
 
@@ -34,11 +34,16 @@ public partial class ChatWindow : Node {
 
         requestButton.Pressed += OnRequest;
 
-        GameManager.Instance.AllBeaconsFound += ShowDoorText;
+        GameManager.Instance.UpdateBeaconsFound += UpdateBeacons;
+        GameManager.Instance.AllBeaconsFound += UpdateBeacons;
     }
 
-    private void ShowDoorText() {
-        doorText.Show();
+    private void UpdateBeacons() {
+        if (GameManager.Instance.discoveredBeacons.Count == Consts.NUM_TOTAL_BEACONS) {
+            beaconText.Text = "Due to your generous collaboration, the gate has been opened! Join your bretheren at the heart of the mountain.";
+        } else {
+            beaconText.Text = $"Found: {GameManager.Instance.discoveredBeacons.Count} of {Consts.NUM_TOTAL_BEACONS}";
+        }
     }
 
 

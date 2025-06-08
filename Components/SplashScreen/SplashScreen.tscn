@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://d4r5c28iri6j"]
+
+[ext_resource type="Script" uid="uid://bq57ry4hd7ogo" path="res://Components/SplashScreen/SplashScreen.cs" id="1_pkb7r"]
+[ext_resource type="PackedScene" uid="uid://44bwwsdkf7ct" path="res://Components/SplashScreen/Notice.tscn" id="2_hvfi2"]
+[ext_resource type="Script" uid="uid://dx8n8sdeaxv0k" path="res://Components/FadeController.cs" id="3_iibf8"]
+[ext_resource type="Texture2D" uid="uid://b5ilrmv3rxr17" path="res://Components/SplashScreen/jam_full.png" id="4_n25j8"]
+
+[node name="SplashScreen" type="Control" node_paths=PackedStringArray("splashScreen", "fade")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pkb7r")
+splashScreen = NodePath("TextureRect")
+fade = NodePath("ColorRect")
+scene = ExtResource("2_hvfi2")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("3_iibf8")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_n25j8")
+expand_mode = 2
+stretch_mode = 6

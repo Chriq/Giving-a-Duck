@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://44bwwsdkf7ct"]
+
+[ext_resource type="Script" uid="uid://bq57ry4hd7ogo" path="res://Components/SplashScreen/SplashScreen.cs" id="1_7fnr3"]
+[ext_resource type="PackedScene" uid="uid://dq8xdp1vhqq55" path="res://Scenes/MainMenu.tscn" id="2_y8d54"]
+[ext_resource type="Script" uid="uid://dx8n8sdeaxv0k" path="res://Components/FadeController.cs" id="3_hsquu"]
+
+[node name="Notice" type="Control" node_paths=PackedStringArray("splashScreen", "fade")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7fnr3")
+splashScreen = NodePath("Background")
+fade = NodePath("ColorRect")
+scene = ExtResource("2_y8d54")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("3_hsquu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 53.0
+offset_right = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "This Game is meant to be played with 4 players. Grab your friends for a good time!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
