@@ -112,6 +112,13 @@ public partial class MultiplayerController : Node {
     // Called on client and server when player disconnects
     private void PeerDisconnected(long id) {
         // TODO: remove player node from scene, or otherwise handle disconnection
+        if (GameManager.Instance.players.ContainsKey(id)) {
+            GameManager.Instance.players.Remove(id);
+        }
+
+        if (GameManager.Instance.players.Count == 0) {
+            GameManager.Instance.ClearAllData();
+        }
     }
 
     private void ServerDisconnected() {
