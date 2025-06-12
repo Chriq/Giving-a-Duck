@@ -85,7 +85,7 @@ public partial class MultiplayerController : Node {
     }
 
     public void Start() {
-        if (GameManager.Instance.players.Count < 4) {
+        if (GameManager.Instance.players.Count < 2) {
             (GetTree().CurrentScene as MultiplayerMenu).NotEnoughPlayers();
         } else {
             Rpc(MethodName.LoadGame);

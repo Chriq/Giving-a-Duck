@@ -30,11 +30,23 @@ public partial class GameManager : Node {
         }
 
         if (Multiplayer.IsServer()) {
+            int numItemsPerPlayer = itemPool.Count / players.Count;
+            int remainder = itemPool.Count % players.Count;
+
             itemPool.Shuffle();
 
             foreach (PlayerInfo p in players.Values) {
-                Item item = itemPool[0];
-                Rpc(MethodName.InitializeRemoteItems, p.id, (int)item);
+                for (int i = 0; i < numItemsPerPlayer; i++) {
+                    if (itemPool.Count > 0) {
+                        Item item = itemPool[0];
+                        Rpc(MethodName.InitializeRemoteItems, p.id, (int)item);
+                    }
+                }
+
+                if (remainder > 0) {
+                    Rpc(MethodName.InitializeRemoteItems, p.id, (int)itemPool[0]);
+                    remainder--;
+                }
             }
         }
     }

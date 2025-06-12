@@ -75,7 +75,7 @@ public partial class MultiplayerMenu : Control {
     }
 
     public void NotEnoughPlayers() {
-        errorLabel.Text = $"This game requires 4 players. Only {GameManager.Instance.players.Count} have joined.";
+        errorLabel.Text = $"This game requires 2-4 players. Only {GameManager.Instance.players.Count} have joined.";
     }
 
     public void OnVolumeChanged(float value) {
